@@ -4,12 +4,12 @@
 
 html {
   margin: 0em 0em;
-  padding 0em 0em;
+  padding: 0em 0em;
   background: #eeeeee none;
 }
 body {
   margin: 1em 1.5em;
-  padding 0em 0em;
+  padding: 0em 0em;
   background: #eeeeee none;
   color: #111111;
 }
@@ -82,8 +82,18 @@ div.illust img {
 pre {
   padding: 0.2em;
   background-color: #ddddee;
-  border: 1pt solid #bbbbcc;
+  border: 1px solid #bbbbcc;
   font-size: 95%;
+}
+
+li,dt,dd {
+  line-height: 130%;
+}
+dt {
+  margin-left: 1.2em;
+}
+dd {
+  margin-left: 2.0em;
 }
 
 table {
@@ -103,6 +113,20 @@ td.label {
 }
 td.number {
   text-align: right;
+}
+
+a {
+  color: #0022aa;
+  text-decoration: none;
+}
+a:hover,a:focus {
+  color: #0033ee;
+  text-decoration: underline;
+}
+kbd {
+  color: #111111;
+  font-style: normal;
+  font-weight: bold;
 }
 
 @media print {
@@ -130,7 +154,7 @@ td.number {
   pre {
     margin: 0.8em 0.8em;
     background-color: #ffffff;
-    border: 1pt solid #aaaaaa;
+    border: 1px solid #aaaaaa;
     font-size: 90%;
   }
   a,kbd {
