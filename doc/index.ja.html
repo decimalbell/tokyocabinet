@@ -47,9 +47,19 @@
       switch((now.getMonth() + now.getDate() + now.getMinutes()) % 32 + 10000){
       default:
         text = "世界最強絶対無敵電光石火疾風迅雷資料基盤管理器";
-        if(now.getSeconds() % 30 == 0){
+        switch(now.getSeconds() % 30){
+        case 0:
           label = "東京ラブストーリー";
           text = "東京では誰もがラブストーリーの主人公になる";
+          break;
+        case 20:
+          label = "東京タワー";
+          text = "〜オカンとボクと、時々、オトン〜";
+          break;
+        case 40:
+          label = "東京青春朝焼物語";
+          text = "今日から俺、東京の人になる";
+          break;
         }
         break;
       case 1: text = "NDBMとは違うのだよ、NDBMとは！"; break;
@@ -85,7 +95,7 @@
 <h1 id="headline">Tokyo Cabinet: DBMの現代的な壱実装</h1>
 
 <div class="note">Copyright (C) 2006-2008 Mikio Hirabayashi</div>
-<div class="note">Last Update: Thu, 17 Jan 2008 01:09:19 +0900</div>
+<div class="note">Last Update: Thu, 17 Apr 2008 14:56:26 +0900</div>
 <div class="navi">[<a href="index.html" hreflang="en">English</a>/<span class="void">Japanese</span>]</div>
 
 <div class="logo"><img src="logo-ja.png" alt="Tokyo Cabinet" width="300" height="110" /></div>
@@ -94,11 +104,13 @@
 
 <h2>概要</h2>
 
-<p>Tokyo Cabinetはデータベースを扱うルーチン群のライブラリです。データベースといっても単純なもので、キーと値のペアからなるレコード群を格納したデータファイルです。キーと値は任意の長さを持つ一連のバイト列であり、文字列でもバイナリでも扱うことができます。テーブルやデータ型の概念はありません。レコードはハッシュ表またはB+木で編成されます。</p>
+<p>Tokyo Cabinetはデータベースを扱うルーチン群のライブラリです。データベースといっても単純なもので、キーと値のペアからなるレコード群を格納したデータファイルです。キーと値は任意の長さを持つ一連のバイト列であり、文字列でもバイナリでも扱うことができます。テーブルやデータ型の概念はありません。レコードはハッシュ表かB+木か固定長配列で編成されます。</p>
 
 <p>ハッシュ表のデータベースでは、キーはデータベース内で一意であり、キーが重複する複数のレコードを格納することはできません。このデータベースに対しては、キーと値を指定してレコードを格納したり、キーを指定して対応するレコードを削除したり、キーを指定して対応するレコードを検索したりすることができます。また、データベースに格納してある全てのキーを順不同に一つずつ取り出すこともできます。このような操作は、UNIX標準で定義されているDBMライブラリおよびその追従であるNDBMやGDBMに類するものです。Tokyo CabinetはDBMのより良い代替として利用することができます。</p>
 
 <p>B+木のデータベースでは、キーが重複する複数のレコードを格納することができます。このデータベースに対しては、ハッシュ表のデータベースと同様に、キーを指定してレコードを格納したり取り出したり削除したりすることができます。レコードはユーザが指示した比較関数に基づいて整列されて格納されます。カーソルを用いて各レコードを昇順または降順で参照することができます。この機構によって、文字列の前方一致検索や数値の範囲検索が可能になります。また、B+木のデータベースではトランザクションが利用できます。</p>
+
+<p>固定長配列のデータベースでは、一意な自然数をキーとしてレコードが格納されます。キーが重複する複数のレコードを格納することはできません。また、各レコードの値の長さは一定以下に制限されます。提供される操作はハッシュデータベースとほぼ同様です。</p>
 
 <p>Tokyo CabinetはC言語で記述され、CとPerlとRubyとJavaのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
 
@@ -114,7 +126,11 @@
 <li><a href="perldoc/">Perl用API仕様書</a></li>
 <li><a href="rubydoc/">Ruby用API仕様書</a></li>
 <li><a href="javadoc/">Java用API仕様書</a></li>
-<li><a href="tyrantdoc/">リモートサービス仕様書</a></li>
+</ul>
+
+<ul>
+<li><a href="tyrantdoc/">リモートサービス（Tokyo Tyrant）仕様書</a></li>
+<li><a href="dystopiadoc/">転置インデックス（Tokyo Dystopia）仕様書</a></li>
 </ul>
 
 <ul>
@@ -126,7 +142,7 @@
 <h2>ダウンロード</h2>
 
 <ul>
-<li><a href="tokyocabinet-1.1.15.tar.gz">最新のソースパッケージ（バージョン1.1.15）</a></li>
+<li><a href="tokyocabinet-1.2.9.tar.gz">最新のソースパッケージ（バージョン1.2.9）</a></li>
 <li><a href="pastpkg/">過去のバージョン</a></li>
 </ul>
 
@@ -134,7 +150,11 @@
 <li><a href="perlpkg/">Perl用API</a></li>
 <li><a href="rubypkg/">Ruby用API</a></li>
 <li><a href="javapkg/">Java用API</a></li>
-<li><a href="tyrantpkg/">リモートサービス</a></li>
+</ul>
+
+<ul>
+<li><a href="tyrantpkg/">リモートサービス（Tokyo Tyrant）</a></li>
+<li><a href="dystopiapkg/">転置インデックス（Tokyo Dystopia）</a></li>
 </ul>
 
 <hr />
