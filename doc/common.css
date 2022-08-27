@@ -116,6 +116,10 @@ ul.options {
   font-size: 95%;
   color: #333333;
 }
+ul ul {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
 
 table {
   border-collapse: collapse;
@@ -184,7 +188,7 @@ var {
     border: 1px solid #aaaaaa;
     font-size: 90%;
   }
-  a,kbd {
+  a,code,kbd {
     color: #000000;
     text-decoration: none;
   }
@@ -194,7 +198,7 @@ var {
   p,div,li,dt,dd {
     font-family: serif;
   }
-  pre,kbd {
+  pre,code,kbd {
     font-family: monospace;
   }
   dd {

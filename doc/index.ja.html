@@ -44,10 +44,10 @@
       case 23: label = "Nagoya Cabinet"; break;
       }
       var text;
-      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 32 + 10000){
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 48){
       default:
         text = "世界最強絶対無敵電光石火疾風迅雷資料基盤管理器";
-        switch(now.getSeconds() % 30){
+        switch(now.getSeconds()){
         case 0:
           label = "東京ラブストーリー";
           text = "東京では誰もがラブストーリーの主人公になる";
@@ -64,24 +64,35 @@
         break;
       case 1: text = "NDBMとは違うのだよ、NDBMとは！"; break;
       case 2: text = "Tokyo Cabinetは伊達じゃないっ！"; break;
-      case 4: text = "敢えて言おう、高速であると！"; break;
-      case 5: text = "しかし、私もDBMのはずだ！"; break;
-      case 7: text = "今の私はTokyo Cabinetだ。それ以上でもそれ以下でもない。"; break;
-      case 8: text = "私はBerkeleyとは関係ない。私はいつも一人のDBMだった。"; break;
-      case 10: text = "見せてもらおうか！Berkeleyのデータベースの性能とやらを！"; break;
-      case 11: text = "悲しいけどこれ、DBMなのよね。"; break;
-      case 13: text = "新しい時代を創るのはSQLではない！！"; break;
-      case 14: text = "えぇぃ、マイナーチェンジのくせにっ！"; break;
-      case 16: text = "よくもこんなくたびれたDBMが現役でいられるものだ。"; break;
-      case 17: text = "見える！私にもレコードが見える"; break;
-      case 19: text = "そんなRDBみたいな口の利き方、おやめなさい！"; break;
-      case 20: text = "悪い人だ。GDBMをいじめる悪い人だ。"; break;
-      case 22: text = "僕が一番トランザクションをうまく使えるんだ。"; break;
-      case 23: text = "実は容量が足らんのです。"; break;
-      case 25: text = "遊びでやってるんじゃないんだよっ！！"; break;
-      case 27: text = "人は時間さえも支配できる…。"; break;
-      case 29: text = "さすがハッシュだ、なんともないぜ。"; break;
-      case 31: text = "プロセッサの性能差が戦力の決定的な差でないことを見せてやる！"; break;
+      case 3: text = "こいつ…動くぞ…？"; break;
+      case 5: text = "敢えて言おう、高速であると！"; break;
+      case 6: text = "しかし、私もDBMのはずだ！"; break;
+      case 7: text = "SQLで世界を変えれるって…おかしいんだよ！！ "; break;
+      case 9: text = "今の私はTokyo Cabinetだ。それ以上でもそれ以下でもない。"; break;
+      case 10: text = "私はBerkeleyとは関係ない。私はいつも一人のDBMだった。"; break;
+      case 11: text = "逆立ちしたってDBMはRDBにはなれないからな。"; break;
+      case 13: text = "見せてもらおうか！Berkeleyのデータベースの性能とやらを！"; break;
+      case 14: text = "悲しいけどこれ、DBMなのよね。"; break;
+      case 15: text = "そのDBMの性能で勝ったということを忘れるな！！"; break;
+      case 17: text = "新しい時代を創るのはSQLではない！！"; break;
+      case 18: text = "えぇぃ、マイナーチェンジのくせにっ！"; break;
+      case 19: text = "あんなの飾りです！偉い人にはそれが分からんのですよ！"; break;
+      case 21: text = "よくもこんなくたびれたDBMが現役でいられるものだ。"; break;
+      case 22: text = "見える！私にもレコードが見える！"; break;
+      case 23: text = "私の愛馬は凶暴です。"; break;
+      case 25: text = "そんなRDBみたいな口の利き方、おやめなさい！"; break;
+      case 26: text = "悪い人だ。GDBMをいじめる悪い人だ。"; break;
+      case 27: text = "作戦は一刻を争う！"; break;
+      case 29: text = "僕が一番トランザクションをうまく使えるんだ。"; break;
+      case 30: text = "実は容量が足らんのです。"; break;
+      case 31: text = "おれはDBMだ！DBMでたくさんだっ！ "; break;
+      case 33: text = "遊びでやってるんじゃないんだよっ！！"; break;
+      case 34: text = "あれはいいものだ！"; break;
+      case 35: text = "人は時間さえも支配できる…。"; break;
+      case 37: text = "この風！この肌触りこそDBMよ！ "; break;
+      case 38: text = "さすがハッシュだ、なんともないぜ。"; break;
+      case 39: text = "プロセッサの性能差が戦力の決定的な差でないことを見せてやる！"; break;
+      case 41: text = "君は、生き延びる事ができるか…？ "; break;
       }
       elem.firstChild.nodeValue = label + ": " + text;
     }
@@ -94,8 +105,8 @@
 
 <h1 id="headline">Tokyo Cabinet: DBMの現代的な壱実装</h1>
 
-<div class="note">Copyright (C) 2006-2008 Mikio Hirabayashi</div>
-<div class="note">Last Update: Thu, 17 Apr 2008 14:56:26 +0900</div>
+<div class="note">Copyright (C) 2006-2009 Mikio Hirabayashi</div>
+<div class="note">Last Update: Sat, 03 Jan 2009 21:41:33 +0900</div>
 <div class="navi">[<a href="index.html" hreflang="en">English</a>/<span class="void">Japanese</span>]</div>
 
 <div class="logo"><img src="logo-ja.png" alt="Tokyo Cabinet" width="300" height="110" /></div>
@@ -106,17 +117,24 @@
 
 <p>Tokyo Cabinetはデータベースを扱うルーチン群のライブラリです。データベースといっても単純なもので、キーと値のペアからなるレコード群を格納したデータファイルです。キーと値は任意の長さを持つ一連のバイト列であり、文字列でもバイナリでも扱うことができます。テーブルやデータ型の概念はありません。レコードはハッシュ表かB+木か固定長配列で編成されます。</p>
 
-<p>ハッシュ表のデータベースでは、キーはデータベース内で一意であり、キーが重複する複数のレコードを格納することはできません。このデータベースに対しては、キーと値を指定してレコードを格納したり、キーを指定して対応するレコードを削除したり、キーを指定して対応するレコードを検索したりすることができます。また、データベースに格納してある全てのキーを順不同に一つずつ取り出すこともできます。このような操作は、UNIX標準で定義されているDBMライブラリおよびその追従であるNDBMやGDBMに類するものです。Tokyo CabinetはDBMのより良い代替として利用することができます。</p>
+<p>Tokyo CabinetはGDBMやQDBMの後継として次の点を目標として開発されました。これらの目標は達成されており、Tokyo Cabinetは従来のDBMを置き換える製品だと言えます。</p>
 
-<p>B+木のデータベースでは、キーが重複する複数のレコードを格納することができます。このデータベースに対しては、ハッシュ表のデータベースと同様に、キーを指定してレコードを格納したり取り出したり削除したりすることができます。レコードはユーザが指示した比較関数に基づいて整列されて格納されます。カーソルを用いて各レコードを昇順または降順で参照することができます。この機構によって、文字列の前方一致検索や数値の範囲検索が可能になります。また、B+木のデータベースではトランザクションが利用できます。</p>
+<ul>
+<li>空間効率の向上 : データベースファイルがより小さい</li>
+<li>時間効率の向上 : 処理がより高速である</li>
+<li>並列性の向上 : マルチスレッド環境での同時実行性能の向上</li>
+<li>利便性の向上 : APIがより単純である</li>
+<li>堅牢性の向上 : 不慮の事態でもデータベースファイルが壊れにくい</li>
+<li>64ビット対応 : 巨大なメモリ空間とデータベースファイルを扱える</li>
+</ul>
 
-<p>固定長配列のデータベースでは、一意な自然数をキーとしてレコードが格納されます。キーが重複する複数のレコードを格納することはできません。また、各レコードの値の長さは一定以下に制限されます。提供される操作はハッシュデータベースとほぼ同様です。</p>
-
-<p>Tokyo CabinetはC言語で記述され、CとPerlとRubyとJavaのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
+<p>Tokyo CabinetはC言語で記述され、CとPerlとRubyとJavaとLuaのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
 
 <hr />
 
 <h2>文書</h2>
+
+<p>以下の文書を読んでください。ソースパッケージにも同じものが含まれています。</p>
 
 <ul>
 <li><a href="spex-ja.html">基本仕様書</a></li>
@@ -126,14 +144,19 @@
 <li><a href="perldoc/">Perl用API仕様書</a></li>
 <li><a href="rubydoc/">Ruby用API仕様書</a></li>
 <li><a href="javadoc/">Java用API仕様書</a></li>
+<li><a href="luadoc/">Lua用API仕様書</a></li>
 </ul>
 
 <ul>
-<li><a href="tyrantdoc/">リモートサービス（Tokyo Tyrant）仕様書</a></li>
+<li><a href="tyrantdoc/">リモートサービス（Tokyo Tyrant）仕様書</a><ul>
+<li><a href="tyrantperldoc/">Perlクライアント仕様書</a></li>
+<li><a href="tyrantrubydoc/">Rubyクライアント仕様書</a></li>
+</ul></li>
 <li><a href="dystopiadoc/">転置インデックス（Tokyo Dystopia）仕様書</a></li>
 </ul>
 
 <ul>
+<li><a href="tokyoproducts.pdf">プレゼンテーション</a></li>
 <li><a href="benchmark.pdf">ベンチマークテストのレポート</a></li>
 </ul>
 
@@ -141,8 +164,10 @@
 
 <h2>ダウンロード</h2>
 
+<p>以下のソースパッケージをダウンロードしてください。バイナリパッケージについては、各ディストリビュータのサイトをご覧ください。</p>
+
 <ul>
-<li><a href="tokyocabinet-1.2.9.tar.gz">最新のソースパッケージ（バージョン1.2.9）</a></li>
+<li><a href="tokyocabinet-1.3.27.tar.gz">最新のソースパッケージ（バージョン1.3.27）</a></li>
 <li><a href="pastpkg/">過去のバージョン</a></li>
 </ul>
 
@@ -150,11 +175,16 @@
 <li><a href="perlpkg/">Perl用API</a></li>
 <li><a href="rubypkg/">Ruby用API</a></li>
 <li><a href="javapkg/">Java用API</a></li>
+<li><a href="luapkg/">Lua用API</a></li>
 </ul>
 
 <ul>
 <li><a href="tyrantpkg/">リモートサービス（Tokyo Tyrant）</a></li>
 <li><a href="dystopiapkg/">転置インデックス（Tokyo Dystopia）</a></li>
+</ul>
+
+<ul>
+<li><a href="misc/">関連するパッケージ</a></li>
 </ul>
 
 <hr />
