@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="author" content="Mikio Hirabayashi" />
+<meta name="keywords" content="Tokyo Cabinet, tokyocabinet, database, DBM" />
+<meta name="description" content="homepage of Tokyo Cabinet" />
+<link rel="contents" href="./" />
+<link rel="alternate" href="index.html" hreflang="en" title="the English version" />
+<link rel="stylesheet" href="common.css" />
+<link rel="icon" href="icon16.png" />
+<link rev="made" href="mailto:mikio@users.sourceforge.net" />
+<title>Tokyo Cabinet: DBM for Petit Hackers</title>
+</head>
+
+<body>
+
+<h1>Tokyo Cabinet: DBM for Petit Hackers</h1>
+
+<div class="note">Copyright (C) 2006-2007 Mikio Hirabayashi</div>
+<div class="note">Last Update: Mon, 13 Aug 2007 04:03:06 +0900</div>
+<div class="navi">[<span class="void">English</span>/<a href="index.ja.html" hreflang="ja">Japanese</a>]</div>
+
+<hr />
+
+<h2>Overview</h2>
+
+<p>Tokyo Cabinet is a library of routines for managing a database.  The database is a simple data file containing records, each is a pair of a key and a value.  Every key and value is serial bytes with variable length.  Both binary data and character string can be used as a key and a value.  There is neither concept of data tables nor data types.  Records are organized in hash table or B+ tree.</p>
+
+<p>As for database of hash table, each key must be unique within a database, so it is impossible to store two or more records with a key overlaps.  The following access methods are provided to the database: storing a record with a key and a value, deleting a record by a key, retrieving a record by a key.  Moreover, traversal access to every key are provided, although the order is arbitrary.  These access methods are similar to ones of DBM (or its followers: NDBM and GDBM) library defined in the UNIX standard.  Tokyo Cabinet is an alternative for DBM because of its higher performance.</p>
+
+<p>Tokyo Cabinet is written in C, and provided as API of C.  Tokyo Cabinet is available on platforms which have API conforming to POSIX.  Tokyo Cabinet is a free software licensed under the GNU Lesser General Public License.</p>
+
+<hr />
+
+<h2>Documents</h2>
+
+<p>The following are documents of Tokyo Cabinet.  They are contained also in the source package.</p>
+
+<ul>
+<li><a href="spex-en.html">Fundamental Specifications</a></li>
+</ul>
+
+<hr />
+
+<h2>Packages</h2>
+
+<p>The following is the source packages of Tokyo Cabinet.</p>
+
+<ul>
+<li><a href="tokyocabinet-0.2.9.tar.gz">Latest Source Package (version 0.2.9)</a></li>
+</ul>
+
+<hr />
+
+</body>
+
+</html>
+
+<!-- END OF FILE -->

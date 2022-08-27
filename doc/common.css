@@ -1,0 +1,156 @@
+/*
+ * Style Sheets commonly used by documents of Tokyo Cabinet
+ */
+
+html {
+  margin: 0em 0em;
+  padding 0em 0em;
+  background: #eeeeee none;
+}
+body {
+  margin: 1em 1.5em;
+  padding 0em 0em;
+  background: #eeeeee none;
+  color: #111111;
+}
+
+hr {
+  margin: 2.5em 0em 1.5em 0em;
+  height: 1px;
+  border: none;
+  background: #999999 none;
+  color: #999999;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: bold;
+}
+h1 {
+  margin: 1.0em 0em 1.3em 0em;
+  padding: 0em 0em; 
+  font-size: 180%;
+}
+h2 {
+  margin: 1.0em 0em 1.0em 0.2em;
+  padding: 0.5em 0.5em; 
+  width: 60%;
+  border-left: solid 0.6em #445555;
+  border-bottom: solid 1px #bbbbbb;
+  font-size: 150%;
+}
+h3 {
+  margin: 0.8em 0em 0.5em 0.2em;
+  padding: 0em 0em; 
+  font-size: 120%;
+}
+
+p {
+  margin: 0.8em 0em;
+  line-height: 140%;
+}
+p,dd {
+  text-indent: 0.8em;
+}
+
+span.void { color: #888888; }
+
+div,pre,table {
+  margin: 0.8em 1.5em;
+}
+
+div.note,div.navi {
+  text-align: right;
+  margin: 0em 0.5em;
+  color: #333333;
+}
+
+div.logo {
+  text-align: center;
+  margin: 3em 0em;
+}
+div.logo img {
+  border: inset 2px #ccccdd;
+}
+div.illust {
+  margin: 1em 0em;
+  text-align: center;
+}
+div.illust img {
+  border: solid 1px #ccccdd;
+}
+
+pre {
+  padding: 0.2em;
+  background-color: #ddddee;
+  border: 1pt solid #bbbbcc;
+  font-size: 95%;
+}
+
+table {
+  border-collapse: collapse;
+}
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.1em 0.5em;
+  border: solid 1px #aaaabb;
+  font-size: 95%;
+}
+td.label {
+  border: none;
+  font-size: 80%;
+  color: #333333;
+}
+td.number {
+  text-align: right;
+}
+
+@media print {
+  html,body {
+    margin: 0em 0em;
+    background-color: #ffffff;
+    color: #000000;
+  }
+  h1 {
+    padding: 8em 0em 0.5em 0em;
+    text-align: center;
+  }
+  h2 {
+    page-break-before: always;
+  }
+  div.note {
+    text-align: center;
+  }
+  div.navi,div.logo {
+    display: none;
+  }
+  hr {
+    display: none;
+  }
+  pre {
+    margin: 0.8em 0.8em;
+    background-color: #ffffff;
+    border: 1pt solid #aaaaaa;
+    font-size: 90%;
+  }
+  a,kbd {
+    color: #000000;
+    text-decoration: none;
+  }
+  h1,h2,h3 {
+    font-family: sans-serif;
+  }
+  p,div,li,dt,dd {
+    font-family: serif;
+  }
+  pre,kbd {
+    font-family: monospace;
+  }
+  dd {
+    font-size: 90%;
+  }
+}
+
+
+
+/* END OF FILE */
