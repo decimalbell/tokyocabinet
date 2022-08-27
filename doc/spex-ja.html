@@ -24,7 +24,7 @@
 <h1>Tokyo Cabinet第1版仕様書</h1>
 
 <div class="note">Copyright (C) 2006-2007 Mikio Hirabayashi</div>
-<div class="note">Last Update: Mon, 16 Jul 2007 19:45:16 +0900</div>
+<div class="note">Last Update: Wed, 24 Oct 2007 01:26:07 +0900</div>
 <div class="navi">[<a href="spex-en.html" hreflang="en">English</a>/<span class="void">Japanese</span>] [<a href="index.ja.html">HOME</a>]</div>
 
 <hr />
@@ -38,6 +38,7 @@
 <li><a href="#tcutilapi">ユーティリティAPI</a></li>
 <li><a href="#tchdbapi">ハッシュデータベースAPI</a></li>
 <li><a href="#tcbdbapi">B+木データベースAPI</a></li>
+<li><a href="#tips">ちょっとしたコツ</a></li>
 <li><a href="#fileformat">ファイルフォーマット</a></li>
 <li><a href="#faq">よく聞かれる質問</a></li>
 <li><a href="#license">ライセンス</a></li>
@@ -53,7 +54,7 @@
 
 <p>B+木のデータベースでは、キーが重複する複数のレコードを格納することができます。このデータベースに対しては、ハッシュ表のデータベースと同様に、キーを指定してレコードを格納したり取り出したり削除したりすることができます。レコードはユーザが指示した比較関数に基づいて整列されて格納されます。カーソルを用いて各レコードを昇順または降順で参照することができます。この機構によって、文字列の前方一致検索や数値の範囲検索が可能になります。また、B+木のデータベースではトランザクションが利用できます。</p>
 
-<p>Tokyo CabinetはC言語で記述され、CのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
+<p>Tokyo CabinetはC言語で記述され、CとPerlとRubyとJavaのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
 
 <hr />
 
@@ -74,7 +75,7 @@
 <li>64ビット対応 : 巨大なメモリ空間とデータベースファイルを扱える</li>
 </ul>
 
-<p>Tokyo CabinetはQDBMと同様に、伝統的なDBMが抱える三つの制限事項を回避しています。すなわち、プロセス内で複数のデータベースを扱うことができ、キーと値のサイズに制限がなく、データベースファイルがスパースではありません。さらに、QDBMが抱える二つの制限事項を回避しています。すなわち、2GB以上のデータベースファイルを扱うことができ、複数のスレッドが同時にデータベースの探索を行うことができます。</p>
+<p>Tokyo CabinetはQDBMと同様に、伝統的なDBMが抱える三つの制限事項を回避しています。すなわち、プロセス内で複数のデータベースを扱うことができ、キーと値のサイズに制限がなく、データベースファイルがスパースではありません。さらに、QDBMが抱える三つの制限事項を回避しています。すなわち、2GB以上のデータベースファイルを扱うことができ、バイトオーダの異なる環境間でデータベースファイルを共有することができ、複数のスレッドが同時にデータベースの探索を行うことができます。</p>
 
 <p>Tokyo Cabinetは高速に動作します。例えば100万件のレコードの登録にかかる時間は、ハッシュデータベースで1.5秒ほど、B+木データベースで2.2秒ほどです。そしてTokyo Cabinetのデータベースは小さいです。例えば1レコードあたりのオーバーヘッドは、ハッシュデータベースで16バイトほど、B+木データベースで5バイトほどです。さらにTokyo Cabinetで扱えるデータの規模は莫大です。最大8EB（9.22e18バイト）までのデータベースファイルを扱うことができます。</p>
 
@@ -110,7 +111,7 @@
 
 <p>メモリ上でレコードを簡単に扱うために、ユーティリティAPIが提供されます。リストやマップといった基本的なデータ構造をはじめ、メモリプールや文字列処理や符号処理など、プログラミングで良く使う機能を詰め込んでいます。</p>
 
-<!-- Tokyo CabinetはC言語の他にも、Java、PerlおよびRubyのAPIを提供します。C言語のAPIには、ユーティリティAPI、ハッシュデータベースAPI、B+木データベースAPIの三種類があります。各APIに対応したコマンドラインインタフェースも用意されています。それらはプロトタイピングやテストやデバッグなどで活躍するでしょう。Java用APIはJava Native Interfaceを用いてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。Perl用APIはXS言語を用いてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。Ruby用APIはRubyのモジュールとしてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。その他の言語のインターフェイスも第三者によって提供されるでしょう。 -->
+<p>C言語のAPIには、ユーティリティAPI、ハッシュデータベースAPI、B+木データベースAPIの三種類があります。各APIに対応したコマンドラインインタフェースも用意されています。それらはプロトタイピングやテストやデバッグなどで活躍するでしょう。Tokyo CabinetはC言語の他にも、Java、PerlおよびRubyのAPIを提供します。Java用APIはJava Native Interfaceを用いてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。Perl用APIはXS言語を用いてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。Ruby用APIはRubyのモジュールとしてハッシュデータベースAPIとB+木データベースAPIを呼び出すものです。その他の言語のインターフェイスも第三者によって提供されるでしょう。</p>
 
 <hr />
 
@@ -124,6 +125,7 @@
 
 <ul>
 <li>Linux 2.4以降 (IA32/IA64/AMD64)</li>
+<li>Mac OS X 10.3以降 (PowerPC/IA32)</li>
 </ul>
 
 <p>ソースパッケージを用いてTokyo Cabinetをインストールするには、<code>gcc</code>のバージョン3.1以降と<code>make</code>が必要です。それらはLinuxやFreeBSDなどには標準的にインストールされています。</p>
@@ -166,7 +168,7 @@
 /usr/local/include/tchdb.h
 /usr/local/include/tcbdb.h
 /usr/local/lib/libtokyocabinet.a
-/usr/local/lib/libtokyocabinet.so.1.8.0
+/usr/local/lib/libtokyocabinet.so.1.18.0
 /usr/local/lib/libtokyocabinet.so.1
 /usr/local/lib/libtokyocabinet.so
 /usr/local/lib/pkgconfig/tokyocabinet.pc
@@ -188,14 +190,16 @@
 <p>「<code>./configure</code>」を実行する際には、以下のオプションを指定することができます。</p>
 
 <ul class="options">
-<li><code>--enable-debug</code> : デバッグ用にビルドします。デバッグシンボルを有効化し、最適化を行わず、静的にリンクします。</li>
-<li><code>--enable-devel</code> : 開発用にビルドします。デバッグシンボルを有効化し、最適化を行い、動的にリンクします。</li>
-<li><code>--enable-profile</code> : プロファイル用にビルドします。プロファイルオプションを有効化し、最適化を行い、動的にリンクします。</li>
-<li><code>--enable-fastest</code> : 最高速になるように最適化を行います。</li>
-<li><code>--enable-swab</code> : バイトオーダの変換を強制します。</li>
-<li><code>--disable-zlib</code> : ZLIBによるレコード圧縮を無効にします。</li>
-<li><code>--disable-pthread</code> : POSIXスレッドのサポートを無効にします。</li>
-<li><code>--disable-shared</code> : 共有ライブラリのビルドを行いません。</li>
+<li><code>--enable-debug</code> : デバッグ用にビルドする。デバッグシンボルを有効化し、最適化を行わず、静的にリンクする。</li>
+<li><code>--enable-devel</code> : 開発用にビルドする。デバッグシンボルを有効化し、最適化を行い、動的にリンクする。</li>
+<li><code>--enable-profile</code> : プロファイル用にビルドする。プロファイルオプションを有効化し、最適化を行い、動的にリンクする。</li>
+<li><code>--enable-fastest</code> : 最高速になるように最適化を行う。</li>
+<li><code>--enable-off64</code> : 32ビット環境でも64ビットのファイルオフセットを用いる。</li>
+<li><code>--enable-swab</code> : バイトオーダの変換を強制する。</li>
+<li><code>--enable-uyield</code> : レースコンディションの検出用にビルドする。</li>
+<li><code>--disable-zlib</code> : ZLIBによるレコード圧縮を無効にする。</li>
+<li><code>--disable-pthread</code> : POSIXスレッドのサポートを無効にする。</li>
+<li><code>--disable-shared</code> : 共有ライブラリのビルドを行わない。</li>
 </ul>
 
 <p>`<code>--prefix</code>' などのオプションも一般的なUNIXソフトウェアのパッケージと同様に利用可能です。`<code>/usr/local</code>' 以下ではなく '<code>/usr</code>' 以下にインストールしたい場合は `<code>--prefix=/usr</code>' を指定してください。なお、ライブラリ検索パスに `<code>/usr/local/lib</code>' が入っていない環境では、Tokyo Cabinetのアプリケーションを実行する際に環境変数 `<code>LD_LIBRARY_PATH</code>' の値に `<code>/usr/local/lib</code>' を含めておくようにしてください。</p>
@@ -208,7 +212,7 @@
   -L/usr/local/lib -ltokyocabinet -lz -lm -lc
 </pre>
 
-<p>Tokyo CabinetはC++言語のプログラムからも利用することができます。その際には各ヘッダのインクルードをCリンケージ（「<code>extern "C"</code>」ブロックの中）で行ってください。</p>
+<p>Tokyo CabinetはC++言語のプログラムからも利用することができます。各ヘッダは暗黙的にCリンケージ（「<code>extern "C"</code>」ブロック）で包まれているので、単にインクルードするだけで利用することができます。</p>
 
 <hr />
 
@@ -223,7 +227,6 @@
 <dl>
 <dt><code>#include &lt;tcutil.h&gt;</code></dt>
 <dt><code>#include &lt;stdlib.h&gt;</code></dt>
-<dt><code>#include &lt;time.h&gt;</code></dt>
 <dt><code>#include &lt;stdbool.h&gt;</code></dt>
 <dt><code>#include &lt;stdint.h&gt;</code></dt>
 </dl>
@@ -242,8 +245,8 @@
 
 <dl class="api">
 <dt><code>extern void (*tcfatalfunc)(const char *);</code></dt>
-<dd>The argument specifies the error message.  The initial value of this variable is `NULL'.</dd>
-<dd>If the value is `NULL', the default function is called when a fatal error occurs.  A fatal error occurs when memory allocation is failed.</dd>
+<dd>The argument specifies the error message.</dd>
+<dd>The initial value of this variable is `NULL'.  If the value is `NULL', the default function is called when a fatal error occurs.  A fatal error occurs when memory allocation is failed.</dd>
 </dl>
 
 <p>The function `tcmalloc' is used in order to allocate a region on memory.</p>
@@ -259,7 +262,8 @@
 
 <dl class="api">
 <dt><code>void *tccalloc(size_t <var>nmemb</var>, size_t <var>size</var>);</code></dt>
-<dd>`<var>size</var>' specifies the size of the region.</dd>
+<dd>`<var>nmemb</var>' specifies the number of elements.</dd>
+<dd>`<var>size</var>' specifies the size of each element.</dd>
 <dd>The return value is the pointer to the allocated nullified region.</dd>
 <dd>This function handles failure of memory allocation implicitly.  Because the region of the return value is allocated with the `calloc' call, it should be released with the `free' call when it is no longer in use.</dd>
 </dl>
@@ -744,7 +748,6 @@
 <dd>`<var>map</var>' specifies the map object.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>`<var>vstr</var>' specifies the string of the value.</dd>
-<dd>`<var>over</var>' specifies whether the value of the duplicated record is overwritten or not.</dd>
 <dd>If a record with the same key exists in the database, it is overwritten.</dd>
 </dl>
 
@@ -807,7 +810,7 @@
 <p>The function `tcmapout2' is used in order to remove a string record of a map object.</p>
 
 <dl class="api">
-<dt><code>bool tcmapout2(TCMAP *<var>map</var>, const void *kstr);</code></dt>
+<dt><code>bool tcmapout2(TCMAP *<var>map</var>, const char *<var>kstr</var>);</code></dt>
 <dd>`<var>map</var>' specifies the map object.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>If successful, the return value is true.  False is returned when no record corresponds to the specified key.</dd>
@@ -1209,6 +1212,15 @@
 
 <h3>ファイルシステム関連ユーティリティのAPI（英語御免）</h3>
 
+<p>The function `tcrealpath' is used in order to get the canonicalized absolute path of a file.</p>
+
+<dl class="api">
+<dt><code>char *tcrealpath(const char *<var>path</var>);</code></dt>
+<dd>`<var>path</var>' specifies the path of the file.</dd>
+<dd>The return value is the canonicalized absolute path of a file, or `NULL' if the path is invalid.</dd>
+<dd>Because the region of the return value is allocated with the `malloc' call, it should be released with the `free' call when it is no longer in use.</dd>
+</dl>
+
 <p>The function `tcreadfile' is used in order to read whole data of a file.</p>
 
 <dl class="api">
@@ -1237,6 +1249,16 @@
 <dd>`<var>ptr</var>' specifies the pointer to the data region.</dd>
 <dd>`<var>size</var>' specifies the size of the region.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
+</dl>
+
+<p>The function `tccopyfile' is used in order to copy a file.</p>
+
+<dl class="api">
+<dt><code>bool tccopyfile(const char *<var>src</var>, const char *<var>dest</var>);</code></dt>
+<dd>`<var>src</var>' specifies the path of the source file.</dd>
+<dd>`<var>dest</var>' specifies the path of the destination file.</dd>
+<dd>The return value is true if successful, else, it is false.</dd>
+<dd>If the destination file exists, it is overwritten.</dd>
 </dl>
 
 <p>The function `tcreaddir' is used in order to read names of files in a directory.</p>
@@ -1528,7 +1550,6 @@
 
 <pre>#include &lt;tcutil.h&gt;
 #include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
 #include &lt;stdbool.h&gt;
 #include &lt;stdint.h&gt;
 #include &lt;stdio.h&gt;
@@ -1544,7 +1565,7 @@ int main(int argc, char **argv){
     tcxstrcat2(xstr, "step");
     tcxstrcat2(xstr, "jump");
     /* サイズと内容を印字する */
-    printf("%d:%s\n", tcxstrsize(xstr), tcxstrptr(xstr));
+    printf("%d:%s\n", tcxstrsize(xstr), (char *)tcxstrptr(xstr));
     /* オブジェクトを破棄する */
     tcxstrdel(xstr);
   }
@@ -1628,7 +1649,7 @@ int main(int argc, char **argv){
 <dd>ZLIBの圧縮とその伸長を行う。</dd>
 <dt><code>tcucodec xml [-d] [-br] [<var>file</var>]</code></dt>
 <dd>XMLの処理を行う。デフォルトではメタ文字のエスケープを行う。</dd>
-<dt><code>tcucodec conf</code></dt>
+<dt><code>tcucodec conf [-v|-i|-l|-p]</code></dt>
 <dd>各種の設定情報を出力する。</dd>
 </dl>
 
@@ -1642,6 +1663,10 @@ int main(int argc, char **argv){
 <li><code>-q</code> : Quoted-printableエンコードを用いる。デフォルトはBase64である。</li>
 <li><code>-bwt</code> : 前処理としてBWTを用いる。</li>
 <li><code>-gz</code> : GZIP形式を用いる。</li>
+<li><code>-v</code> : Tokyo Cabinetのバージョン番号を表示する。</li>
+<li><code>-i</code> : Tokyo Cabinetのヘッダのインクルードオプションを表示する。</li>
+<li><code>-l</code> : Tokyo Cabinetのライブラリのリンクオプションを表示する。</li>
+<li><code>-p</code> : Tokyo Cabinetのコマンドのあるディレクトリを表示する。</li>
 </ul>
 
 <p>このコマンドは処理が正常に終了すれば 0 を返し、エラーがあればそれ以外の値を返して終了します。</p>
@@ -1660,7 +1685,6 @@ int main(int argc, char **argv){
 <dt><code>#include &lt;tcutil.h&gt;</code></dt>
 <dt><code>#include &lt;tchdb.h&gt;</code></dt>
 <dt><code>#include &lt;stdlib.h&gt;</code></dt>
-<dt><code>#include &lt;time.h&gt;</code></dt>
 <dt><code>#include &lt;stdbool.h&gt;</code></dt>
 <dt><code>#include &lt;stdint.h&gt;</code></dt>
 </dl>
@@ -1669,13 +1693,14 @@ int main(int argc, char **argv){
 
 <p>レコードの格納や探索を行う前提として、ハッシューデータベースオブジェクトをデータベースファイルと接続させる必要があります。データベースファイルを開いて接続するに関数 `<code>tchdbopen</code>' を用い、接続の解除してファイルを閉じるには関数 `<code>tchdbclose</code>' を用います。開いたデータベースファイルは必ず閉じてください。そうしないとデータベースファイルが壊れたり格納したデータが失われたりする可能性があります。</p>
 
-<h3>API（英語御免）</h3>
+<h3>API（英語ゴメン）</h3>
 
 <p>The function `tchdberrmsg' is used in order to get the message string corresponding to an error code.</p>
 
 <dl class="api">
 <dt><code>const char *tchdberrmsg(int <var>ecode</var>);</code></dt>
 <dd>`<var>ecode</var>' specifies the error code.</dd>
+<dd>The return value is the message string of the error code.</dd>
 </dl>
 
 <p>The function `tchdbnew' is used in order to create a hash database object.</p>
@@ -1699,6 +1724,7 @@ int main(int argc, char **argv){
 <dt><code>int tchdbecode(TCHDB *<var>hdb</var>);</code></dt>
 <dd>`<var>hdb</var>' specifies the hash database object.</dd>
 <dd>The return value is the last happened error code.</dd>
+<dd>The following error code is defined: `TCESUCCESS' for success, `TCETHREAD' for threading error, `TCEINVALID' for invalid operation, `TCENOFILE' for file not found, `TCENOPERM' for no permission, `TCEMETA' for invalid meta data, `TCERHEAD' for invalid record header, `TCEOPEN' for open error, `TCECLOSE' for close error, `TCETRUNC' for trunc error, `TCESYNC' for sync error, `TCESTAT' for stat error, `TCESEEK' for seek error, `TCEREAD' for read error, `TCEWRITE' for write error, `TCEMMAP' for mmap error, `TCELOCK' for lock error, `TCEUNLINK' for unlink error, `TCERENAME' for rename error, `TCEMKDIR' for mkdir error, `TCERMDIR' for rmdir error, `TCEKEEP' for existing record, `TCENOREC' for no record found, and `TCEMISC' for miscellaneous error.</dd>
 </dl>
 
 <p>The function `tchdbsetmutex' is used in order to set mutual exclusion control of a hash database object for threading.</p>
@@ -1729,7 +1755,7 @@ int main(int argc, char **argv){
 <dt><code>bool tchdbopen(TCHDB *<var>hdb</var>, const char *<var>path</var>, int <var>omode</var>);</code></dt>
 <dd>`<var>hdb</var>' specifies the hash database object which is not opened.</dd>
 <dd>`<var>path</var>' specifies the path of the database file.</dd>
-<dd>`<var>omode</var>' specifies the connection mode: `HDBOWRITER' as a writer, `HDBOREADER' as a reader.  If the mode is `HDBOWRITER', the following may be added by bitwise or: `HDBOCREAT', which means it creates a new database if not exist, `HDBOTRUNC', which means it creates a new database regardless if one exists.  Both of `HDBOREADER' and `HDBOWRITER' can be added to by bitwise or: `HDBONOLCK', which means it opens the database file without file locking, or `HDBOLOCKNB', which means locking is performed without blocking.</dd>
+<dd>`<var>omode</var>' specifies the connection mode: `HDBOWRITER' as a writer, `HDBOREADER' as a reader.  If the mode is `HDBOWRITER', the following may be added by bitwise or: `HDBOCREAT', which means it creates a new database if not exist, `HDBOTRUNC', which means it creates a new database regardless if one exists.  Both of `HDBOREADER' and `HDBOWRITER' can be added to by bitwise or: `HDBONOLCK', which means it opens the database file without file locking, or `HDBOLCKNB', which means locking is performed without blocking.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 </dl>
 
@@ -1762,7 +1788,6 @@ int main(int argc, char **argv){
 <dd>`<var>hdb</var>' specifies the hash database object connected as a writer.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>`<var>vstr</var>' specifies the string of the value.</dd>
-<dd>`<var>over</var>' specifies whether the value of the duplicated record is overwritten or not.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 <dd>If a record with the same key exists in the database, it is overwritten.</dd>
 </dl>
@@ -1902,6 +1927,15 @@ int main(int argc, char **argv){
 <dd>If successful, the return value is the size of the value of the corresponding record, else, it is -1.</dd>
 </dl>
 
+<p>The function `tchdbvsiz2' is used in order to get the size of the value of a string record in a hash database object.</p>
+
+<dl class="api">
+<dt><code>int tchdbvsiz2(TCHDB *<var>hdb</var>, const char *<var>kstr</var>);</code></dt>
+<dd>`<var>hdb</var>' specifies the hash database object.</dd>
+<dd>`<var>kstr</var>' specifies the string of the key.</dd>
+<dd>If successful, the return value is the size of the value of the corresponding record, else, it is -1.</dd>
+</dl>
+
 <p>The function `tchdbiterinit' is used in order to initialize the iterator of a hash database object.</p>
 
 <dl class="api">
@@ -1957,9 +1991,27 @@ int main(int argc, char **argv){
 <dd>`<var>bnum</var>' specifies the number of elements of the bucket array.  If it is not more than 0, the default value is specified.  The default value is two times of the number of records.</dd>
 <dd>`<var>apow</var>' specifies the size of record alignment by power of 2.  If it is negative, the current setting is not changed.</dd>
 <dd>`<var>fpow</var>' specifies the maximum number of elements of the free block pool by power of 2.  If it is negative, the current setting is not changed.</dd>
-<dd>`<var>opts</var>' specifies options by bitwise or: `HDBTLARGE' specifies that the size of the database can be larger than 2GB by using 64-bit bucket array, `HDBTDEFLATE' specifies that each record is compressed with Deflate encoding, `HDBTTCBS' specifies that each record is compressed with TCBS encoding.  If it is `UINT8_MAX', the default setting is not changed.</dd>
+<dd>`<var>opts</var>' specifies options by bitwise or: `HDBTLARGE' specifies that the size of the database can be larger than 2GB by using 64-bit bucket array, `HDBTDEFLATE' specifies that each record is compressed with Deflate encoding, `HDBTTCBS' specifies that each record is compressed with TCBS encoding.  If it is `UINT8_MAX', the current setting is not changed.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 <dd>This function is useful to reduce the size of the database file with data fragmentation by successive updating.</dd>
+</dl>
+
+<p>The function `tchdbvanish' is used in order to remove all records of a hash database object.</p>
+
+<dl class="api">
+<dt><code>bool tchdbvanish(TCHDB *<var>hdb</var>);</code></dt>
+<dd>`<var>hdb</var>' specifies the hash database object connected as a writer.</dd>
+<dd>If successful, the return value is true, else, it is false.</dd>
+</dl>
+
+<p>The function `tchdbcopy' is used in order to copy the database file of a hash database object.</p>
+
+<dl class="api">
+<dt><code>bool tchdbcopy(TCHDB *<var>hdb</var>, const char *<var>path</var>);</code></dt>
+<dd>`<var>hdb</var>' specifies the hash database object.</dd>
+<dd>`<var>path</var>' specifies the path of the destination file.  If it begins with `@', the trailing substring is executed as a command line.</dd>
+<dd>If successful, the return value is true, else, it is false.  False is returned if the executed command returns non-zero code.</dd>
+<dd>The database file is assured to be kept synchronized and not modified while the copying or executing operation is in progress.  So, this function is useful to create a backup file of the database file.</dd>
 </dl>
 
 <p>The function `tchdbpath' is used in order to get the file path of a hash database object.</p>
@@ -1993,7 +2045,6 @@ int main(int argc, char **argv){
 <pre>#include &lt;tcutil.h&gt;
 #include &lt;tchdb.h&gt;
 #include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
 #include &lt;stdbool.h&gt;
 #include &lt;stdint.h&gt;
 
@@ -2095,14 +2146,16 @@ int main(int argc, char **argv){
 <p>コマンド `<code>tchmttest</code>' は、ハッシュデータベースAPIの機能テストをマルチスレッドで行うツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>tnum</var>' はスレッド数を指定し、`<var>rnum</var>' は試行回数を指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定します。</p>
 
 <dl class="api">
-<dt><code>tchmttest write [-tl] [-td|-tb] [-nl|-nb] [-as] path tnum rnum [bnum] [apow] [fpow]</code></dt>
+<dt><code>tchmttest write [-tl] [-td|-tb] [-nl|-nb] [-as] <var>path</var> <var>tnum</var> <var>rnum</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]</code></dt>
 <dd>`00000001'、`00000002' のように変化する8バイトのキーと値を連続してデータベースに追加する。</dd>
-<dt><code>tchmttest read [-nl|-nb] [-wb] path tnum</code></dt>
+<dt><code>tchmttest read [-nl|-nb] [-wb] <var>path</var> <var>tnum</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを検索する。</dd>
-<dt><code>tchmttest read [-nl|-nb] path tnum</code></dt>
+<dt><code>tchmttest read [-nl|-nb] <var>path</var> <var>tnum</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを削除する。</dd>
-<dt><code>tchmttest wicked [-tl] [-td|-tb] [-nl|-nb] [-nc] path tnum rnum</code></dt>
+<dt><code>tchmttest wicked [-tl] [-td|-tb] [-nl|-nb] [-nc] <var>path</var> <var>tnum</var> <var>rnum</var></code></dt>
 <dd>各種更新操作を無作為に選択して実行する。</dd>
+<dt><code>tchmttest typical [-tl] [-td|-tb] [-nl|-nb] [-nc] <var>path</var> <var>tnum</var> <var>rnum</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]</code></dt>
+<dd>典型的な操作を無作為に選択して実行する。</dd>
 </dl>
 
 <p>各オプションは以下の機能を持ちます</p>
@@ -2115,11 +2168,12 @@ int main(int argc, char **argv){
 <li><code>-nb</code> : オプション `HDBLCKNB' を有効にする。</li>
 <li><code>-as</code> : 関数 `tchdbput' の代わりに関数 `tchdbputasync' を用いる。</li>
 <li><code>-wb</code> : 関数 `tchdbget' の代わりに関数 `tchdbget3' を用いる。</li>
+<li><code>-nc</code> : 比較テストを行わない。</li>
 </ul>
 
 <p>このコマンドは処理が正常に終了すれば 0 を返し、エラーがあればそれ以外の値を返して終了します。</p>
 
-<p>コマンド `<code>tchmgr</code>' は、ハッシュデータベースAPIやそのアプリケーションのテストやデバッグに役立つツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定します。</p>
+<p>コマンド `<code>tchmgr</code>' は、ハッシュデータベースAPIやそのアプリケーションのテストやデバッグに役立つツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定し、`<var>file</var>' は入力ファイルを指定します。</p>
 
 <dl class="api">
 <dt><code>tchmgr create [-tl] [-td|-tb] <var>path</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]</code></dt>
@@ -2132,10 +2186,12 @@ int main(int argc, char **argv){
 <dd>レコードを削除する。</dd>
 <dt><code>tchmgr get [-nl|-nb] [-sx] [-px] [-pz] <var>path</var> <var>key</var></code></dt>
 <dd>レコードの値を取得して標準出力する。</dd>
-<dt><code>tchmgr list [-nl|-nb] [-pv] <var>path</var></code></dt>
+<dt><code>tchmgr list [-nl|-nb] [-m <var>num</var>] [-pv] [-px] <var>path</var></code></dt>
 <dd>全てのレコードのキーを改行で区切って標準出力する。</dd>
 <dt><code>tchmgr optimize [-tl] [-td|-tb] [-tz] [-nl|-nb] <var>path</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]</code></dt>
 <dd>データベースを最適化する。</dd>
+<dt><code>tchmgr importtsv [-nl|-nb] [-sc] <var>path</var> [<var>file</var>]</code></dt>
+<dd>TSVファイルの各行をキーと値とみなしてレコードを登録する。</dd>
 <dt><code>tchmgr version</code></dt>
 <dd>Tokyo Cabinetのバージョン情報を標準出力する。</dd>
 </dl>
@@ -2153,8 +2209,10 @@ int main(int argc, char **argv){
 <li><code>-dc</code> : 関数 `tchdbput' の代わりに関数 `tchdbputcat' を用いる。</li>
 <li><code>-px</code> : 出力を16進数の文字列で行う。</li>
 <li><code>-pz</code> : 出力の末尾に改行を付加しない。</li>
+<li><code>-m <var>num</var></code> : 出力の最大数を指定する。</li>
 <li><code>-pv</code> : レコードの値も出力する。</li>
 <li><code>-tz</code> : オプション `UINT8_MAX' を有効にする。</li>
+<li><code>-sc</code> : キーを小文字に正規化する。</li>
 </ul>
 
 <p>このコマンドは処理が正常に終了すれば 0 を返し、エラーがあればそれ以外の値を返して終了します。</p>
@@ -2174,7 +2232,6 @@ int main(int argc, char **argv){
 <dt><code>#include &lt;tchdb.h&gt;</code></dt>
 <dt><code>#include &lt;tcbdb.h&gt;</code></dt>
 <dt><code>#include &lt;stdlib.h&gt;</code></dt>
-<dt><code>#include &lt;time.h&gt;</code></dt>
 <dt><code>#include &lt;stdbool.h&gt;</code></dt>
 <dt><code>#include &lt;stdint.h&gt;</code></dt>
 </dl>
@@ -2183,13 +2240,14 @@ int main(int argc, char **argv){
 
 <p>レコードの格納や探索を行う前提として、B+木ーデータベースオブジェクトをデータベースファイルと接続させる必要があります。データベースファイルを開いて接続するに関数 `<code>tcbdbopen</code>' を用い、接続の解除してファイルを閉じるには関数 `<code>tcbdbclose</code>' を用います。開いたデータベースファイルは必ず閉じてください。そうしないとデータベースファイルが壊れたり格納したデータが失われたりする可能性があります。</p>
 
-<h3>API（英語御免）</h3>
+<h3>API（英語ゴメソ）</h3>
 
 <p>The function `tcbdberrmsg' is used in order to get the message string corresponding to an error code.</p>
 
 <dl class="api">
 <dt><code>const char *tcbdberrmsg(int <var>ecode</var>);</code></dt>
 <dd>`<var>ecode</var>' specifies the error code.</dd>
+<dd>The return value is the message string of the error code.</dd>
 </dl>
 
 <p>The function `tcbdbnew' is used in order to create a B+ tree database object.</p>
@@ -2213,6 +2271,7 @@ int main(int argc, char **argv){
 <dt><code>int tcbdbecode(TCBDB *<var>bdb</var>);</code></dt>
 <dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
 <dd>The return value is the last happened error code.</dd>
+<dd>The following error code is defined: `TCESUCCESS' for success, `TCETHREAD' for threading error, `TCEINVALID' for invalid operation, `TCENOFILE' for file not found, `TCENOPERM' for no permission, `TCEMETA' for invalid meta data, `TCERHEAD' for invalid record header, `TCEOPEN' for open error, `TCECLOSE' for close error, `TCETRUNC' for trunc error, `TCESYNC' for sync error, `TCESTAT' for stat error, `TCESEEK' for seek error, `TCEREAD' for read error, `TCEWRITE' for write error, `TCEMMAP' for mmap error, `TCELOCK' for lock error, `TCEUNLINK' for unlink error, `TCERENAME' for rename error, `TCEMKDIR' for mkdir error, `TCERMDIR' for rmdir error, `TCEKEEP' for existing record, `TCENOREC' for no record found, and `TCEMISC' for miscellaneous error.</dd>
 </dl>
 
 <p>The function `tcbdbsetmutex' is used in order to set mutual exclusion control of a B+ tree database object for threading.</p>
@@ -2231,7 +2290,8 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object which is not opened.</dd>
 <dd>`<var>cmp</var>' specifies the pointer to the custom comparison function.</dd>
 <dd>`<var>cmpop</var>' specifies an arbitrary pointer to be given as a parameter of the comparison function.  If it is not needed, `NULL' can be specified.</dd>
-<dd>The default comparison function compares keys of two records by lexical order.  Note that the custom comparison function should be set before the database is opened and should be set every time the database is being opened.</dd>
+<dd>If successful, the return value is true, else, it is false.</dd>
+<dd>The default comparison function compares keys of two records by lexical order.  The functions `tcbdbcmplexical' (dafault), `tcbdbcmpdecimal', `tcbdbcmpint32', and `tcbdbcmpint64' are built-in.  Note that the comparison function should be set before the database is opened.  Moreover, user-defined comparison functions should be set every time the database is being opened.</dd>
 </dl>
 
 <p>The function `tcbdbtune' is used in order to set the tuning parameters of a B+ tree database object.</p>
@@ -2241,7 +2301,7 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object which is not opened.</dd>
 <dd>`<var>lmemb</var>' specifies the number of members in each leaf page.  If it is not more than 0, the default value is specified.  The default value is 128.</dd>
 <dd>`<var>nmemb</var>' specifies the number of members in each non-leaf page.  If it is not more than 0, the default value is specified.  The default value is 256.</dd>
-<dd>`<var>bnum</var>' specifies the number of elements of the bucket array.  If it is not more than 0, the default value is specified.  The default value is 16381.</dd>
+<dd>`<var>bnum</var>' specifies the number of elements of the bucket array.  If it is not more than 0, the default value is specified.  The default value is 16381.  Suggested size of the bucket array is about from 1 to 4 times of the number of all pages to be stored.</dd>
 <dd>`<var>apow</var>' specifies the size of record alignment by power of 2.  If it is negative, the default value is specified.  The default value is 8 standing for 2^8=256.</dd>
 <dd>`<var>fpow</var>' specifies the maximum number of elements of the free block pool by power of 2.  If it is negative, the default value is specified.  The default value is 10 standing for 2^10=1024.</dd>
 <dd>`<var>opts</var>' specifies options by bitwise or: `BDBTLARGE' specifies that the size of the database can be larger than 2GB by using 64-bit bucket array, `BDBTDEFLATE' specifies that each page is compressed with Deflate encoding, `BDBTTCBS' specifies that each page is compressed with TCBS encoding.</dd>
@@ -2254,8 +2314,8 @@ int main(int argc, char **argv){
 <dl class="api">
 <dt><code>bool tcbdbsetcache(TCBDB *<var>bdb</var>, int32_t <var>lcnum</var>, int32_t <var>ncnum</var>);</code></dt>
 <dd>`<var>bdb</var>' specifies the B+ tree database object which is not opened.</dd>
-<dd>`<var>lcnum</var>' specifies the maximum number of leaf nodes to be cached.  If it is not more than 0, the default value is specified.</dd>
-<dd>`<var>ncnum</var>' specifies the maximum number of non-leaf nodes to be cached.  If it is not more than 0, the default value is specified.</dd>
+<dd>`<var>lcnum</var>' specifies the maximum number of leaf nodes to be cached.  If it is not more than 0, the default value is specified.  The default value is 1024.</dd>
+<dd>`<var>ncnum</var>' specifies the maximum number of non-leaf nodes to be cached.  If it is not more than 0, the default value is specified.  The default value is 512.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 <dd>Note that the tuning parameters of the database should be set before the database is opened.</dd>
 </dl>
@@ -2266,7 +2326,7 @@ int main(int argc, char **argv){
 <dt><code>bool tcbdbopen(TCBDB *<var>bdb</var>, const char *<var>path</var>, int <var>omode</var>);</code></dt>
 <dd>`<var>bdb</var>' specifies the B+ tree database object which is not opened.</dd>
 <dd>`<var>path</var>' specifies the path of the database file.</dd>
-<dd>`<var>omode</var>' specifies the connection mode: `BDBOWRITER' as a writer, `BDBOREADER' as a reader.  If the mode is `BDBOWRITER', the following may be added by bitwise or: `BDBOCREAT', which means it creates a new database if not exist, `BDBOTRUNC', which means it creates a new database regardless if one exists.  Both of `BDBOREADER' and `BDBOWRITER' can be added to by bitwise or: `BDBONOLCK', which means it opens the database file without file locking, or `BDBOLOCKNB', which means locking is performed without blocking.</dd>
+<dd>`<var>omode</var>' specifies the connection mode: `BDBOWRITER' as a writer, `BDBOREADER' as a reader.  If the mode is `BDBOWRITER', the following may be added by bitwise or: `BDBOCREAT', which means it creates a new database if not exist, `BDBOTRUNC', which means it creates a new database regardless if one exists.  Both of `BDBOREADER' and `BDBOWRITER' can be added to by bitwise or: `BDBONOLCK', which means it opens the database file without file locking, or `BDBOLCKNB', which means locking is performed without blocking.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 </dl>
 
@@ -2299,7 +2359,6 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>`<var>vstr</var>' specifies the string of the value.</dd>
-<dd>`<var>over</var>' specifies whether the value of the duplicated record is overwritten or not.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 <dd>If a record with the same key exists in the database, it is overwritten.</dd>
 </dl>
@@ -2352,7 +2411,7 @@ int main(int argc, char **argv){
 <dd>If there is no corresponding record, a new record is created.</dd>
 </dl>
 
-<p>The function `tcbdbputdup' is used in order to store a new record into a B+ tree database object with allowing duplication of keys.</p>
+<p>The function `tcbdbputdup' is used in order to store a record into a B+ tree database object with allowing duplication of keys.</p>
 
 <dl class="api">
 <dt><code>bool tcbdbputdup(TCBDB *<var>bdb</var>, const void *<var>kbuf</var>, int <var>ksiz</var>, const void *<var>vbuf</var>, int <var>vsiz</var>);</code></dt>
@@ -2365,7 +2424,7 @@ int main(int argc, char **argv){
 <dd>If a record with the same key exists in the database, the new record is placed after the existing one.</dd>
 </dl>
 
-<p>The function `tcbdbputdup2' is used in order to store a new string record into a B+ tree database object with allowing duplication of keys.</p>
+<p>The function `tcbdbputdup2' is used in order to store a string record into a B+ tree database object with allowing duplication of keys.</p>
 
 <dl class="api">
 <dt><code>bool tcbdbputdup2(TCBDB *<var>bdb</var>, const char *<var>kstr</var>, const char *<var>vstr</var>);</code></dt>
@@ -2376,6 +2435,18 @@ int main(int argc, char **argv){
 <dd>If a record with the same key exists in the database, the new record is placed after the existing one.</dd>
 </dl>
 
+<p>The function `tcbdbputdup3' is used in order to store records into a B+ tree database object with allowing duplication of keys.</p>
+
+<dl class="api">
+<dt><code>bool tcbdbputdup3(TCBDB *<var>bdb</var>, const void *<var>kbuf</var>, int <var>ksiz</var>, const TCLIST *<var>vals</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
+<dd>`<var>kbuf</var>' specifies the pointer to the region of the common key.</dd>
+<dd>`<var>ksiz</var>' specifies the size of the region of the common key.</dd>
+<dd>`<var>vals</var>' specifies a list object containing values.</dd>
+<dd>If successful, the return value is true, else, it is false.</dd>
+<dd>If a record with the same key exists in the database, the new records are placed after the existing one.</dd>
+</dl>
+
 <p>The function `tcbdbout' is used in order to remove a record of a B+ tree database object.</p>
 
 <dl class="api">
@@ -2384,7 +2455,7 @@ int main(int argc, char **argv){
 <dd>`<var>kbuf</var>' specifies the pointer to the region of the key.</dd>
 <dd>`<var>ksiz</var>' specifies the size of the region of the key.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.</dd>
 </dl>
 
 <p>The function `tcbdbout2' is used in order to remove a string record of a B+ tree database object.</p>
@@ -2394,7 +2465,7 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.</dd>
 </dl>
 
 <p>The function `tcbdbout3' is used in order to remove records of a B+ tree database object.</p>
@@ -2417,7 +2488,7 @@ int main(int argc, char **argv){
 <dd>`<var>ksiz</var>' specifies the size of the region of the key.</dd>
 <dd>`<var>sp</var>' specifies the pointer to the variable into which the size of the region of the return value is assigned.</dd>
 <dd>If successful, the return value is the pointer to the region of the value of the corresponding record.  `NULL' is returned if no record corresponds.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.  Because an additional zero code is appended at the end of the region of the return value, the return value can be treated as a character string.  Because the region of the return value is allocated with the `malloc' call, it should be released with the `free' call when it is no longer in use.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.  Because an additional zero code is appended at the end of the region of the return value, the return value can be treated as a character string.  Because the region of the return value is allocated with the `malloc' call, it should be released with the `free' call when it is no longer in use.</dd>
 </dl>
 
 <p>The function `tcbdbget2' is used in order to retrieve a string record in a B+ tree database object.</p>
@@ -2427,7 +2498,7 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
 <dd>`<var>kstr</var>' specifies the string of the key.</dd>
 <dd>If successful, the return value is the string of the value of the corresponding record.  `NULL' is returned if no record corresponds.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.  Because the region of the return value is allocated with the `malloc' call, it should be released with the `free' call when it is no longer in use.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.  Because the region of the return value is allocated with the `malloc' call, it should be released with the `free' call when it is no longer in use.</dd>
 </dl>
 
 <p>The function `tcbdbget3' is used in order to retrieve a record in a B+ tree database object as a volatile buffer.</p>
@@ -2439,7 +2510,7 @@ int main(int argc, char **argv){
 <dd>`<var>ksiz</var>' specifies the size of the region of the key.</dd>
 <dd>`<var>sp</var>' specifies the pointer to the variable into which the size of the region of the return value is assigned.</dd>
 <dd>If successful, the return value is the pointer to the region of the value of the corresponding record.  `NULL' is returned if no record corresponds.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.  Because an additional zero code is appended at the end of the region of the return value, the return value can be treated as a character string.  Because the region of the return value is volatile and it may be spoiled by another operation of the database, the data should be copied into another involatile buffer immediately.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.  Because an additional zero code is appended at the end of the region of the return value, the return value can be treated as a character string.  Because the region of the return value is volatile and it may be spoiled by another operation of the database, the data should be copied into another involatile buffer immediately.</dd>
 </dl>
 
 <p>The function `tcbdbget4' is used in order to retrieve records in a B+ tree database object.</p>
@@ -2463,6 +2534,15 @@ int main(int argc, char **argv){
 <dd>If successful, the return value is the number of the corresponding records, else, it is 0.</dd>
 </dl>
 
+<p>The function `tcbdbvnum2' is used in order to get the number of records corresponding a string key in a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>int tcbdbvnum2(TCBDB *<var>bdb</var>, const char *<var>kstr</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>kstr</var>' specifies the string of the key.</dd>
+<dd>If successful, the return value is the number of the corresponding records, else, it is 0.</dd>
+</dl>
+
 <p>The function `tcbdbvsiz' is used in order to get the size of the value of a record in a B+ tree database object.</p>
 
 <dl class="api">
@@ -2471,7 +2551,58 @@ int main(int argc, char **argv){
 <dd>`<var>kbuf</var>' specifies the pointer to the region of the key.</dd>
 <dd>`<var>ksiz</var>' specifies the size of the region of the key.</dd>
 <dd>If successful, the return value is the size of the value of the corresponding record, else, it is -1.</dd>
-<dd>If the key of duplicated records is specified, the value of the first record is selected.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.</dd>
+</dl>
+
+<p>The function `tcbdbvsiz2' is used in order to get the size of the value of a string record in a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>int tcbdbvsiz2(TCBDB *<var>bdb</var>, const char *<var>kstr</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>kstr</var>' specifies the string of the key.</dd>
+<dd>If successful, the return value is the size of the value of the corresponding record, else, it is -1.</dd>
+<dd>If the key of duplicated records is specified, the first one is selected.</dd>
+</dl>
+
+<p>The function `tcbdbrange' is used in order to get keys of ranged records in a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>TCLIST *tcbdbrange(TCBDB *<var>bdb</var>, const void *<var>bkbuf</var>, int <var>bksiz</var>, bool <var>binc</var>, const void *<var>ekbuf</var>, int <var>eksiz</var>, bool <var>einc</var>, int <var>max</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>bkbuf</var>' specifies the pointer to the region of the key of the beginning border.  If it is `NULL', the first record is specified.</dd>
+<dd>`<var>bksiz</var>' specifies the size of the region of the beginning key.</dd>
+<dd>`<var>binc</var>' specifies whether the beginning border is inclusive or not.</dd>
+<dd>`<var>ekbuf</var>' specifies the pointer to the region of the key of the ending border.  If it is `NULL', the last record is specified.</dd>
+<dd>`<var>eksiz</var>' specifies the size of the region of the ending key.</dd>
+<dd>`<var>einc</var>' specifies whether the ending border is inclusive or not.</dd>
+<dd>`<var>max</var>' specifies the maximum number of keys to be fetched.  If it is negative, no limit is specified.</dd>
+<dd>The return value is a list object of the values of the corresponding records.  This function does never fail and return an empty list even if no record corresponds.</dd>
+<dd>Because the object of the return value is created with the function `tclistnew', it should be deleted with the function `tclistdel' when it is no longer in use.</dd>
+</dl>
+
+<p>The function `tcbdbrange2' is used in order to get string keys of ranged records in a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>TCLIST *tcbdbrange2(TCBDB *<var>bdb</var>, const char *<var>bkstr</var>, bool <var>binc</var>, const char *<var>ekstr</var>, bool <var>einc</var>, int <var>max</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>bkstr</var>' specifies the string of the key of the beginning border.  If it is `NULL', the first record is specified.</dd>
+<dd>`<var>binc</var>' specifies whether the beginning border is inclusive or not.</dd>
+<dd>`<var>ekstr</var>' specifies the string of the key of the ending border.  If it is `NULL', the last record is specified.</dd>
+<dd>`<var>einc</var>' specifies whether the ending border is inclusive or not.</dd>
+<dd>`<var>max</var>' specifies the maximum number of keys to be fetched.  If it is negative, no limit is specified.</dd>
+<dd>The return value is a list object of the values of the corresponding records.  This function does never fail and return an empty list even if no record corresponds.</dd>
+<dd>Because the object of the return value is created with the function `tclistnew', it should be deleted with the function `tclistdel' when it is no longer in use.</dd>
+</dl>
+
+<p>The function `tcbdbrange3' is used in order to get forward matching keys in a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>TCLIST *tcbdbrange3(TCBDB *<var>bdb</var>, const char *<var>prefix</var>, int <var>max</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>prefix</var>' specifies the prefix of the corresponding keys.</dd>
+<dd>`<var>max</var>' specifies the maximum number of keys to be fetched.  If it is negative, no limit is specified.</dd>
+<dd>The return value is a list object of the values of the corresponding records.  This function does never fail and return an empty list even if no record corresponds.</dd>
+<dd>Because the object of the return value is created with the function `tclistnew', it should be deleted with the function `tclistdel' when it is no longer in use.</dd>
 </dl>
 
 <p>The function `tcbdbsync' is used in order to synchronize updated contents of a B+ tree database object with the file and the device.</p>
@@ -2490,12 +2621,30 @@ int main(int argc, char **argv){
 <dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
 <dd>`<var>lmemb</var>' specifies the number of members in each leaf page.  If it is not more than 0, the current setting is not changed.</dd>
 <dd>`<var>nmemb</var>' specifies the number of members in each non-leaf page.  If it is not more than 0, the current setting is not changed.</dd>
-<dd>`<var>bnum</var>' specifies the number of elements of the bucket array.  If it is not more than 0, the current setting is not changed.</dd>
+<dd>`<var>bnum</var>' specifies the number of elements of the bucket array.  If it is not more than 0, the default value is specified.  The default value is two times of the number of pages.</dd>
 <dd>`<var>apow</var>' specifies the size of record alignment by power of 2.  If it is negative, the current setting is not changed.</dd>
 <dd>`<var>fpow</var>' specifies the maximum number of elements of the free block pool by power of 2.  If it is negative, the current setting is not changed.</dd>
-<dd>`<var>opts</var>' specifies options by bitwise or: `BDBTLARGE' specifies that the size of the database can be larger than 2GB by using 64-bit bucket array, `BDBTDEFLATE' specifies that each record is compressed with Deflate encoding, `BDBTTCBS' specifies that each page is compressed with TCBS encoding.  If it is `UINT8_MAX', the default setting is not changed.</dd>
+<dd>`<var>opts</var>' specifies options by bitwise or: `BDBTLARGE' specifies that the size of the database can be larger than 2GB by using 64-bit bucket array, `BDBTDEFLATE' specifies that each record is compressed with Deflate encoding, `BDBTTCBS' specifies that each page is compressed with TCBS encoding.  If it is `UINT8_MAX', the current setting is not changed.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
 <dd>This function is useful to reduce the size of the database file with data fragmentation by successive updating.</dd>
+</dl>
+
+<p>The function `tcbdbvanish' is used in order to remove all records of a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>bool tcbdbvanish(TCBDB *<var>bdb</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
+<dd>If successful, the return value is true, else, it is false.</dd>
+</dl>
+
+<p>The function `tcbdbcopy' is used in order to copy the database file of a B+ tree database object.</p>
+
+<dl class="api">
+<dt><code>bool tcbdbcopy(TCBDB *<var>bdb</var>, const char *<var>path</var>);</code></dt>
+<dd>`<var>bdb</var>' specifies the B+ tree database object.</dd>
+<dd>`<var>path</var>' specifies the path of the destination file.  If it begins with `@', the trailing substring is executed as a command line.</dd>
+<dd>If successful, the return value is true, else, it is false.  False is returned if the executed command returns non-zero code.</dd>
+<dd>The database file is assured to be kept synchronized and not modified while the copying or executing operation is in progress.  So, this function is useful to create a backup file of the database file.</dd>
 </dl>
 
 <p>The function `tcbdbtranbegin' is used in order to begin the transaction of a B+ tree database object.</p>
@@ -2504,7 +2653,7 @@ int main(int argc, char **argv){
 <dt><code>bool tcbdbtranbegin(TCBDB *<var>bdb</var>);</code></dt>
 <dd>`<var>bdb</var>' specifies the B+ tree database object connected as a writer.</dd>
 <dd>If successful, the return value is true, else, it is false.</dd>
-<dd>The database is locked by the thread while the transaction so that only one transaction can be activated with a database object at the same time.  Thus, the serializable isolation level is assumed if every database operation is performed in the transaction.</dd>
+<dd>The database is locked by the thread while the transaction so that only one transaction can be activated with a database object at the same time.  Thus, the serializable isolation level is assumed if every database operation is performed in the transaction.  If the database is closed during transaction, the transaction is aborted implicitly.</dd>
 </dl>
 
 <p>The function `tcbdbtrancommit' is used in order to commit the transaction of a B+ tree database object.</p>
@@ -2621,7 +2770,7 @@ int main(int argc, char **argv){
 <p>The function `tcbdbcurput' is used in order to insert a record around a cursor object.</p>
 
 <dl class="api">
-<dt><code>bool tcbdbcurput(BDBCUR *<var>cur</var>, const void *<var>vbuf</var>, int <var>vsiz</var>, int cpmode);</code></dt>
+<dt><code>bool tcbdbcurput(BDBCUR *<var>cur</var>, const void *<var>vbuf</var>, int <var>vsiz</var>, int <var>cpmode</var>);</code></dt>
 <dd>`<var>cur</var>' specifies the cursor object of writer connection.</dd>
 <dd>`<var>vbuf</var>' specifies the pointer to the region of the value.</dd>
 <dd>`<var>vsiz</var>' specifies the size of the region of the value.</dd>
@@ -2725,9 +2874,7 @@ int main(int argc, char **argv){
 <pre>#include &lt;tcutil.h&gt;
 #include &lt;tchdb.h&gt;
 #include &lt;tcbdb.h&gt;
-#include &lt;tchdb.h&gt;
 #include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
 #include &lt;stdbool.h&gt;
 #include &lt;stdint.h&gt;
 
@@ -2773,9 +2920,6 @@ int main(int argc, char **argv){
     if(value){
       printf("%s:%s\n", key, value);
       free(value);
-    } else {
-      ecode = tcbdbecode(bdb);
-      fprintf(stderr, "get error: %s\n", tcbdberrmsg(ecode));
     }
     free(key);
     tcbdbcurnext(cur);
@@ -2802,13 +2946,13 @@ int main(int argc, char **argv){
 <p>コマンド `<code>tcbtest</code>' は、B+木データベースAPIの機能テストや性能テストに用いるツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>rnum</var>' は試行回数を指定し、`<var>lmemb</var>' はリーフ内メンバ数を指定し、`<var>nmemb</var>' は非リーフ内メンバ数を指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定します。</p>
 
 <dl class="api">
-<dt><code>tcbtest write [-mt] [-cd|-ci|-cj] [-tl] [-td|-tb] [-lc num] [-nc num] [-nl|-nb] <var>path</var> <var>rnum</var> [<var>lmemb</var> [<var>nmemb</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]]]</code></dt>
+<dt><code>tcbtest write [-mt] [-cd|-ci|-cj] [-tl] [-td|-tb] [-lc <var>num</var>] [-nc <var>num</var>] [-ls <var>num</var>] [-nl|-nb] <var>path</var> <var>rnum</var> [<var>lmemb</var> [<var>nmemb</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]]]</code></dt>
 <dd>`00000001'、`00000002' のように変化する8バイトのキーと値を連続してデータベースに追加する。</dd>
-<dt><code>tcbtest read [-mt] [-cd|-ci|-cj] [-nl|-nb] [-wb] <var>path</var></code></dt>
+<dt><code>tcbtest read [-mt] [-cd|-ci|-cj] [-lc <var>num</var>] [-nc <var>num</var>] [-nl|-nb] [-wb] <var>path</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを検索する。</dd>
-<dt><code>tcbtest remove [-mt] [-cd|-ci|-cj] [-nl|-nb] <var>path</var></code></dt>
+<dt><code>tcbtest remove [-mt] [-cd|-ci|-cj] [-lc <var>num</var>] [-nc <var>num</var>] [-nl|-nb] <var>path</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを削除する。</dd>
-<dt><code>tcbtest rcat [-mt] [-cd|-ci|-cj] [-tl] [-td|-tb] [-lc num] [-nc num] [-nl|-nb] [-pn <var>num</var>] [-rl] <var>path</var> <var>rnum</var> [<var>lmemb</var> [<var>nmemb</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]]]</code></dt>
+<dt><code>tcbtest rcat [-mt] [-cd|-ci|-cj] [-tl] [-td|-tb] [-lc <var>num</var>] [-nc <var>num</var>] [-ls <var>num</var>] [-nl|-nb] [-pn <var>num</var>] [-rl] <var>path</var> <var>rnum</var> [<var>lmemb</var> [<var>nmemb</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]]]</code></dt>
 <dd>キーがある程度重複するようにレコードの追加を行い、連結モードで処理する。</dd>
 <dt><code>tcbtest misc [-mt] [-tl] [-td|-tb] [-nl|-nb] <var>path</var> <var>rnum</var></code></dt>
 <dd>各種操作の組み合わせテストを行う。</dd>
@@ -2826,8 +2970,9 @@ int main(int argc, char **argv){
 <li><code>-tl</code> : オプション `BDBTLARGE' を有効にする。</li>
 <li><code>-td</code> : オプション `BDBTDEFLATE' を有効にする。</li>
 <li><code>-tb</code> : オプション `BDBTTCBS' を有効にする。</li>
-<li><code>-lc</code> : リーフノード用キャッシュの最大数を指定する。</li>
-<li><code>-nc</code> : 非リーフノード用キャッシュの最大数を指定する。</li>
+<li><code>-lc <var>num</var></code> : リーフノード用キャッシュの最大数を指定する。</li>
+<li><code>-nc <var>num</var></code> : 非リーフノード用キャッシュの最大数を指定する。</li>
+<li><code>-ls <var>num</var></code> : リーフノードの最大サイズを指定する。</li>
 <li><code>-nl</code> : オプション `BDBNOLCK' を有効にする。</li>
 <li><code>-nb</code> : オプション `BDBLCKNB' を有効にする。</li>
 <li><code>-wb</code> : 関数 `tcbdbget' の代わりに関数 `tcbdbget3' を用いる。</li>
@@ -2844,10 +2989,12 @@ int main(int argc, char **argv){
 <dd>`00000001'、`00000002' のように変化する8バイトのキーと値を連続してデータベースに追加する。</dd>
 <dt><code>tcbmttest read [-nl|-nb] [-wb] <var>path</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを検索する。</dd>
-<dt><code>tcbtest remove [-nl|-nb] <var>path</var></code></dt>
+<dt><code>tcbmttest remove [-nl|-nb] <var>path</var></code></dt>
 <dd>上記で生成したデータベースの全レコードを削除する。</dd>
-<dt><code>tcbtest wicked [-tl] [-td|-tb] [-nl|-nb] <var>path</var> <var>rnum</var></code></dt>
+<dt><code>tcbmttest wicked [-tl] [-td|-tb] [-nl|-nb] [-nc] <var>path</var> <var>rnum</var></code></dt>
 <dd>各種更新操作を無作為に選択して実行する。</dd>
+<dt><code>tcbmttest typical [-tl] [-td|-tb] [-nl|-nb] [-nc] <var>path</var> <var>rnum</var> [<var>lmemb</var> [<var>nmemb</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]]]</code></dt>
+<dd>典型的な操作を無作為に選択して実行する。</dd>
 </dl>
 
 <p>各オプションは以下の機能を持ちます</p>
@@ -2859,11 +3006,12 @@ int main(int argc, char **argv){
 <li><code>-nl</code> : オプション `BDBNOLCK' を有効にする。</li>
 <li><code>-nb</code> : オプション `BDBLCKNB' を有効にする。</li>
 <li><code>-wb</code> : 関数 `tcbdbget' の代わりに関数 `tcbdbget3' を用いる。</li>
+<li><code>-nc</code> : 比較テストを行わない。</li>
 </ul>
 
 <p>このコマンドは処理が正常に終了すれば 0 を返し、エラーがあればそれ以外の値を返して終了します。</p>
 
-<p>コマンド `<code>tcbmgr</code>' は、B+木データベースAPIやそのアプリケーションのテストやデバッグに役立つツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>lmemb</var>' はリーフ内メンバ数を指定し、`<var>nmemb</var>' は非リーフ内メンバ数を指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定します。</p>
+<p>コマンド `<code>tcbmgr</code>' は、B+木データベースAPIやそのアプリケーションのテストやデバッグに役立つツールです。以下の書式で用います。`<var>path</var>' はデータベースファイルのパスを指定し、`<var>lmemb</var>' はリーフ内メンバ数を指定し、`<var>nmemb</var>' は非リーフ内メンバ数を指定し、`<var>bnum</var>' はバケット数を指定し、`<var>apow</var>' はアラインメント力を指定し、`<var>fpow</var>' はフリーブロックプール力を指定し、`<var>file</var>' は入力ファイルを指定します。</p>
 
 <dl class="api">
 <dt><code>tcbmgr create [-cd|-ci|-cj] [-tl] [-td|-tb] <var>path</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]</code></dt>
@@ -2876,10 +3024,12 @@ int main(int argc, char **argv){
 <dd>レコードを削除する。</dd>
 <dt><code>tcbmgr get [-cd|-ci|-cj] [-nl|-nb] [-sx] [-px] [-pz] <var>path</var> <var>key</var></code></dt>
 <dd>レコードの値を取得して標準出力する。</dd>
-<dt><code>tcbmgr list [-cd|-ci|-cj] [-nl|-nb] [-pv] <var>path</var></code></dt>
+<dt><code>tcbmgr list [-cd|-ci|-cj] [-nl|-nb] [-m <var>num</var>] [-bk] [-pv] [-px] [-j <var>str</var>] [-rb <var>bkey</var> <var>ekey</var>] [-rp <var>str</var>] <var>path</var></code></dt>
 <dd>全てのレコードのキーを改行で区切って標準出力する。</dd>
 <dt><code>tcbmgr optimize [-cd|-ci|-cj] [-tl] [-td|-tb] [-tz] [-nl|-nb] <var>path</var> [<var>bnum</var> [<var>apow</var> [<var>fpow</var>]]]</code></dt>
 <dd>データベースを最適化する。</dd>
+<dt><code>tcbmgr importtsv [-nl|-nb] [-sc] <var>path</var> [<var>file</var>]</code></dt>
+<dd>TSVファイルの各行をキーと値とみなしてレコードを登録する。</dd>
 <dt><code>tcbmgr version</code></dt>
 <dd>Tokyo Cabinetのバージョン情報を標準出力する。</dd>
 </dl>
@@ -2900,11 +3050,111 @@ int main(int argc, char **argv){
 <li><code>-dc</code> : 関数 `tchdbput' の代わりに関数 `tchdbputcat' を用いる。</li>
 <li><code>-px</code> : 出力を16進数の文字列で行う。</li>
 <li><code>-pz</code> : 出力の末尾に改行を付加しない。</li>
+<li><code>-m <var>num</var></code> : 出力の最大数を指定する。</li>
+<li><code>-bk</code> : 走査を逆方向で行う。</li>
 <li><code>-pv</code> : レコードの値も出力する。</li>
+<li><code>-j <var>str</var></code> : カーソルを指定位置にジャンプさせる。</li>
+<li><code>-rb <var>bkey</var> <var>ekey</var></code> : 処理対象を範囲指定する。</li>
+<li><code>-rp <var>pkey</var></code> : 処理対象を前方一致指定する。</li>
 <li><code>-tz</code> : オプション `UINT8_MAX' を有効にする。</li>
+<li><code>-sc</code> : キーを小文字に正規化する。</li>
 </ul>
 
 <p>このコマンドは処理が正常に終了すれば 0 を返し、エラーがあればそれ以外の値を返して終了します。</p>
+
+<hr />
+
+<h2 id="tips">ちょっとしたコツ</h2>
+
+<p>この節ではTokyo Cabinetの使いかたのコツや知っておくと便利な小技を紹介します。</p>
+
+<h3>ハッシュデータベースのチューニング</h3>
+
+<p>チューニングをするかしないかでデータベース操作の性能は劇的に変わるので、まじめなユースケースでは、チューニングは必須となるでしょう。関数 `<code>tchdbtune</code>' でそれを行います。この関数では「バケット数」と「アラインメント力」と「フリーブロックプール力」と「オプション」が指定されます。</p>
+
+<p>最も重要なのは、バケット数の設定です。これは、データベースに格納するレコードの最終的な数の数倍（2〜4倍程度がオススメ）を指定すべきです。デフォルトは16381なので、10000個以上のレコードを入れるならばまずこれを設定すべきです。例えば100万レコードくらいを入れる予定ならば、バケット数は200万〜400万くらいにしておくとよいでしょう。バケット配列の個々の要素のサイズは4バイト（32ビット）なので、バケット数を200万にした場合にはファイルサイズが8MB増えて、メモリも8MB必要となるわけですが、21世紀のコンピュータならそれくらい大したことないでしょう。とりあえずバケット数は大きめにとりましょう。</p>
+
+<p>アラインメントは、レコードの開始位置を揃える機構です。指定したアラインメント力で1を高位にビットシフトした数に開始アドレスが揃えられます。デフォルトは4です。例えばアラインメント力を8にしたならば、1&lt;&lt;8で、256の倍数に開始位置が揃えられます。アラインメントの利点は三つあります。一つめは、開始アドレスを揃えることでレコード間にパディング（隙間）ができることです。レコードサイズの増減がパディングの範囲に収まれば、更新時にレコードの位置を変えなくてもよくなります。二つめは、レコードの読み書きをファイルシステムのブロック単位にあわせて行うことができるために、OSレベルでのI/Oの処理が効率化されることです。三つめは、開始アドレスをアラインメントの商として記録できるようになるため、4バイトのバケットで表せる変域が増加することです。アラインメントを用いない場合は2GB（1&lt;&lt;31）までのデータベースファイルしか扱えませんが、例えばアラインメントが256であれば、2GB*256で512GBまでのデータベースファイルを扱うことができます。</p>
+
+<p>フリーブロックとは、更新によってできたファイル内の未使用領域のことです。フリーブロックプールはそれを管理して再利用する機構です。指定したフリーブロックプール力で1を高位にビットシフトした数がフリーブロックプールの容量になります。デフォルトは10です。この設定を変える必要はほとんどないでしょう。</p>
+
+<p>オプションとは、`<code>HDBTLARGE</code>' と `<code>HDBTDEFLATE</code>' と `<code>HDBTTCBS</code>' の論理和で指定します。`<code>HDBTLARGE</code>' を指定すると、バケットの個々の要素を8バイト（64ビット）で扱います。バケット配列のサイズが2倍になるかわりに、データベースのサイズの上限を8EBに引き上げます。`<code>HDBTDEFLATE</code>' を指定すると、レコードをDeflateアルゴリズムで圧縮してから記録します。大きいレコード（256バイト以上）のレコードを格納する場合に有利です。`<code>HDBTTCBS</code>' を指定すると、レコードをBWTおよびElias Gammaアルゴリズムで圧縮してから記録します。小さいレコード（256バイト未満）のレコードを格納する場合に有利です。</p>
+
+<p>チューニングパラメータの設定はデータベースを作成する前にやる必要があります。チューニングパラメータはメタデータとしてデータベース内に記録されるので、作成した後は指定する必要はありません。なお、いったん作成したデータベースのチューニングを変更することはできません（最適化すればできますが）。バケット数を1000000、アラインメント数を12（4096）、フリーブロックをデフォルト、オプションを `<code>HDBTLARGE</code>' と `<code>HDBTDEFLATE</code>' に指定してデータベースを作成する場合、以下のようなコードになります。</p>
+
+<pre>TCHDB *hdb;
+hdb = tchdbnew();
+tchdbtune(hdb, 1000000, 12, -1, HDBTLARGE | HDBTDEFLATE);
+tchdbopen(hdb, "casket.hdb", HDBOWRITER | HDBOCREAT);
+...
+</pre>
+
+<h3>B+木データベースのチューニング</h3>
+
+<p>チューニングをするかしないかで性能が劇的に変わるのはB+木データベースについても同じです。まじめなユースケースではちゃんとチューニングしましょう。チューニングは関数 `<code>tcbdbtune</code>' で行います。この関数では「リーフ内メンバ数」「非リーフ内メンバ数」「バケット数」と「アラインメント力」と「フリーブロックプール力」と「オプション」が指定されます。</p>
+
+<p>リーフまたはリーフページとは、B+木の末端のノードのことで、複数のレコードのキーと値のリストが格納される記憶単位のことです。リーフ内メンバ数とは、ひとつのリーフの中にいくつのレコードを格納するかの設定です。デフォルトは128です。比較関数の順序通りにレコードを格納または探索することが多い場合はこの値を大きくした方が性能がよくなり、逆に比較関数の順序とは無関係にレコードを格納または探索することが多い場合は小さくした方がよくなります。非リーフまたは非リーフページとはB+木の末端以外のノードのことで、複数のレコードのキーのみが格納される記憶単位のことです。非リーフの数はリーフに比べて少なく、性能に与える影響はあまり大きくありません。非リーフ内メンバ数をデフォルトから変える必要はほとんどないでしょう。</p>
+
+<p>バケット数やその他のパラメータ、B+木データベースの下層にあるハッシュデータベースにそのまま渡されます。B+木の各ページはハッシュデータベースのレコードとして記録されるので、バケット数などのパラメータはその際に意味を持ちます。したがって、ここで指定するバケット数は、B+木データベースにおける最終的なレコード数をリーフ内メンバ数で割った値の数倍に設定するのが最善です。とはいえB+木データベースにおいてはバケット数などのパラメータを変更する必要はあまりないでしょう。</p>
+
+<p>チューニングの例として、平均8バイトのキーと平均32バイトの値のレコードを100万件格納することを考えてみます。各コードのヘッダなどのオーバーヘッドは5バイト程度です。ファイルシステムのブロックサイズは4096バイトとします。すると、1ブロックに入れられるレコード数は4096/(8+32+5)で90個ほどということになります。さらに、Deflate圧縮オプションを有効にして、その圧縮率が50%ほどだとしましょう。となると180個ほどのレコードが1ブロックに収まることが期待されます。各リーフのサイズは2ブロックか3ブロックのサイズが望ましいので、180を2倍した360がリーフ内メンバ数の理想値になります。となると、バケット数は1000000/360で2777となり、デフォルトの16381から変える必要はないでしょう。アラインメント力はファイルシステムのブロックサイズにあわせるためにlog2(4096)で12にします。以上の設定をコードに反映すると以下のようになります。</p>
+
+<pre>TCHDB *bdb;
+bdb = tcbdbnew();
+tcbdbtune(hdb, 360, -1, -1, 12, -1, BDBTDEFLATE);
+tcbdbopen(hdb, "casket.bdb", BDBOWRITER | BDBOCREAT);
+...
+</pre>
+
+<h3>マルチスレッド対応</h3>
+
+<p>Tokyo CabinetのAPIにおける各関数はリエントラントなので、引数として与えるデータが各スレッドで別々のものであれば完全に並列に操作を実行することができます。しかし、データベースオブジェクトは内部状態を持つので、ひとつのデータベースオブジェクトを複数のスレッドで共有する場合には、更新操作に関連して排他制御を行う必要があります。とはいえ、特に難しいことはありません。複数のスレッドで共有するデータベースオブジェクトに対して、作成した直後に関数 `<code>tchdbsetmutex</code>' や `<code>tcbdbsetmutex</code>' を呼び出すだけでOKです。そうすると以後の操作の内部で適切にロックを用いて排他制御が行われるようになります。複数のスレッドを使うが各々が別個のデータベースオブジェクトにアクセスする場合には排他制御は必要ありませんし、排他制御をしない方が高速に動作します。</p>
+
+<p>スレッド間の排他制御はリードライトロックで行われます。`open'、`close'、`put'、`out' などの操作にはライトロック（排他ロック）がかけられ、`get'、`curkey'、`curval' などの操作にはリードロック（共有ロック）がかけられます。つまり、読み込みは激しく同時に行えますが、書き込みをしている間は他のスレッドはブロックされるということです。データベースオブジェクトの排他制御の設定はデータベースを開く前にやる必要があり、開く度に毎回行う必要があります。以下のようなコードになります。</p>
+
+<pre>TCHDB *hdb;
+hdb = tchdbnew();
+tchdbsetmutex(hdb);
+tchdbopen(hdb, "casket.hdb", HDBOWRITER);
+...
+</pre>
+
+<h3>トランザクション</h3>
+
+<p>B+木データベースにはトランザクション機構があります。トランザクションを開始してから行った一連の操作は、コミットすることで確定させたり、アボートすることでなかったことにしたりすることができます。トランザクション中にアプリケーションがクラッシュ場合にも、トランザクション中の操作がなかったことになるだけで、データベースの整合性は維持されます。トランザクションは以下のようなコードでも用います。</p>
+
+<pre>tcbdbtranbegin(hdb);
+do_something();
+if(is_all_ok){
+  tcbdbtrancommit(hdb);
+} else {
+  tcbdbtranabort(hdb);
+}
+</pre>
+
+<p>トランザクションを実行できるのは同時1スレッドのみで、他のスレッドはその間ブロックされます。したがって、データベースの参照をトランザクション内でのみ行うならば、トランザクションの分離レベルは直列化可能（serializable）になります。しかし、あるスレッドがトランザクションの最中でも他のスレッドはトランザクションを実行せずにデータベースを参照できます。その場合の分離レベルは非コミット読み取り（read uncommitted）になります。状況に応じて使い分けてください。</p>
+
+<h3>バックアップ</h3>
+
+<p>データベースファイルのバックアップは、通常のファイルと同様に<code>cp</code>や<code>tar</code>や<code>cpio</code>といったコマンドで行うことができます。ただし、ライタとして接続しているプロセスがデータベースを更新中である場合、コピー元のファイルの状態が中途半端になっている可能性があるため、コピー先のファイルに不整合が起きる場合があります。したがって、データベースが更新中でないこと確認してからバックアップ作業を行うことが必要となります。</p>
+
+<p>デーモンプロセスなどの常駐プロセスがデータベースに接続し続けるユースケースでは上記の手順は現実的ではありません。そういった場合、その常駐プロセスの責任でバックアップ処理を駆動することができます。関数 `<code>tchdbcopy</code>' や `<code>tcbdbcopy</code>' を呼び出すと、更新内容をデータベースファイルと同期させた上で、その間にファイルの複製を行います。バックアップ用関数は任意のコマンドを呼び出すことができるので、ファイルシステムのスナップショット機能を利用してホットバックアップを実現することも可能です。</p>
+
+<h3>ハッシュデータベースとB+木データベースの比較</h3>
+
+<p>キーと値のペアを格納したいというのははっきりしているが、ハッシュデータベースとB+木データベースのどちらを使えばよいかわからないという場合もあるかもしれません。その場合、レコードの検索条件が完全一致だけで済むのなら、ハッシュデータベースを試してください。レコードを順序に基づいて参照したいなら、B+木データベースを試してください。メモリ上だけ保持してファイルに書き出す必要がないならば、ユーティリティAPIのハッシュマップを試してください。</p>
+
+<p>検索条件が完全一致の場合にはハッシュデータベースを使うのが一般的ですが、B+木でも完全一致検索はできます。ファイルシステムのI/Oキャッシュに乗らない大規模のデータベースでは、ハッシュデータベースとB+木データベースの性能特性を考えて、使うデータベースの種類を選択することが重要です。</p>
+
+<p>ハッシュデータベースは内部にキャッシュ機構を持ちませんが、B+木データベースは内部にキャッシュ機構を持つというのが性能上の最大の留意点です。B+木データベースにおいては、データベース内の全てのレコードはキーの昇順で並べられ、順番が近いレコードをページにまとめて管理します。キャッシュやI/Oはページを単位として行います。したがって、順番が近いレコードを参照する場合にはキャッシュがヒットしてI/Oを伴わずに操作が完結するので効率がよくなります。ということは、多数のレコードを格納する際に、対象のレコード群をキーの昇順でソートしてからデータベースに格納すると、I/Oの回数が最小化されて時間効率も空間効率も最高になります。これはアプリケーション層でもキャッシュ機構を持つことを要求するものですが、至高を求めるあなたには不可能ではないはずです。全文検索システムHyper Estraierのインデクシングが高速な秘訣はまさにここにあります。</p>
+
+<p>逆に考えれば、データベースにアクセスする順序が制御できない場合は、B+木データベースよりもハッシュデータベースを使う方が有利ということになります。キャッシュに乗らない場合には、ハッシュデータベースの方がメモリ使用量も小さく、個々のレコードを取り出す際の計算量も小くて済みます。なお、ハッシュデータベースの構築時に一気にレコードを入れるような用途の場合には、非同期モードを使うとB+木データベース以上の更新性能を実現できます。新しいレコードはファイルの末尾に記録されることを利用して、ファイルの末尾部分に特化したキャッシュを作ることができるからです。</p>
+
+<h3>C言語以外の言語のバインディング</h3>
+
+<p>PerlとRubyとJavaの言語バインディングに関しては、Tokyo Cabinetの作者が開発およびメンテナンスを行います。それ以外の言語に関しては、第三者が提供してくれることを望みます。</p>
+
+<p>ユーザの利便性を考えると、C言語以外の言語においても、APIのシンボル名や使いかたはできるだけ似通ったものにすることが望ましいでしょう。そのために、`<code>tokyocabinet.idl</code>' が提供されます。これはIDLで言語共通のインターフェイスを定義したものですので、新たな言語バインディングを設計する際には、できるだけそれに準拠するようにしてください。IDLで定義されていない機能は各言語の流儀にできるだけ合わせてください。インストールの手順やドキュメントなどのパッケージの構造についても、各言語の流儀にできるだけ合わせるとよいでしょう。</p>
 
 <hr />
 
@@ -3010,7 +3260,7 @@ int main(int argc, char **argv){
 <td>マジックナンバ</td>
 <td class="number">0</td>
 <td class="number">1</td>
-<td>データの識別と整合性確認に用いる。0xA1固定</td>
+<td>データの識別と整合性確認に用いる。0xC8固定</td>
 </tr>
 <tr>
 <td>ハッシュ値</td>
@@ -3081,7 +3331,7 @@ int main(int argc, char **argv){
 <td>マジックナンバ</td>
 <td class="number">0</td>
 <td class="number">1</td>
-<td>データの識別と整合性確認に用いる。0xA2固定</td>
+<td>データの識別と整合性確認に用いる。0xB0固定</td>
 </tr>
 <tr>
 <td>ブロックサイズ</td>
@@ -3301,6 +3551,25 @@ int main(int argc, char **argv){
 
 <p>なるべくなら、ハッシュデータベースのファイルをネットワークで配布する際には、MIMEタイプを `<code>application/x-tokyocabinet-hash</code>' にしてください。ファイル名の接尾辞は `<code>.tch</code>' にしてください。B+木データベースのファイルをネットワークで配布する際には、MIMEタイプを `<code>application/x-tokyocabinet-btree</code>' にしてください。ファイル名の接尾辞は `<code>.tcb</code>' にしてください。</p>
 
+<p>データベースファイルのマジックデータを `<code>file</code>' コマンドに識別させたい場合は、`<code>magic</code>' ファイルに以下の行を追記してください。</p>
+
+<pre># Tokyo Cabinet magic data
+0       string    ToKyO\ CaBiNeT\n   Tokyo Cabinet
+&gt;14     string    x                  \b (%s)
+&gt;32     byte      ^1                 \b, Hash
+&gt;32     byte      &amp;1                 \b, B+ tree
+&gt;33     byte      &amp;1                 \b, [open]
+&gt;33     byte      &amp;2                 \b, [fatal]
+&gt;34     byte      x                  \b, apow=%d
+&gt;35     byte      x                  \b, fpow=%d
+&gt;36     byte      &amp;1                 \b, [large]
+&gt;36     byte      &amp;2                 \b, [deflate]
+&gt;36     byte      &amp;4                 \b, [tcbs]
+&gt;40     lelong    x                  \b, bnum=%d
+&gt;48     lelong    x                  \b, rnum=%d
+&gt;56     lelong    x                  \b, fsiz=%d
+</pre>
+
 <hr />
 
 <h2 id="faq">よく聞かれる質問</h2>
@@ -3310,8 +3579,6 @@ int main(int argc, char **argv){
 <dd>A. : Tokyo CabinetはSQLをサポートしません。QDBMはRDBMS（関係データベース管理システム）ではありません。組み込みのRDBMSを求めるなら、SQLiteなどを利用するとよいでしょう。</dd>
 <dt>Q. : Berkeley DBとどう違うのですか？</dt>
 <dd>A. : 時間効率と空間効率の双方でTokyo Cabinetが優っています。トランザクションの機能と耐障害性についてはBerkeley DBの方が優っています。</dd>
-<dt>Q. : どのAPIを使えばよいでしょうか？</dt>
-<dd>A. : レコードの検索が完全一致だけで済むのなら、ハッシュデータベースAPIを試してください。レコードを順序に基づいて参照したいなら、B+木データベースAPIを試してください。メモリ上のマップやリストが使いたいならば、ユーティリティAPIを試してください。</dd>
 <dt>Q. : アプリケーションの良いサンプルコードはありますか？</dt>
 <dd>A. : 各APIのコマンドのソースコードを参考にしてください。`<code>tchmgr.c</code>' と `<code>tcbmgr.c</code>' が最も簡潔でしょう。</dd>
 <dt>Q. : データベースが壊れたのですが、どうしてでしょうか？。</dt>
@@ -3322,12 +3589,14 @@ int main(int argc, char **argv){
 <dd>A. : データベースファイルをロックなしオプション（<code>HDBONOLCK</code>か<code>BDBONOLCK</code>）をつけて開いて、最適化機能（<code>tchdboptimize</code>か<code>tcbdboptimize</code>）を実行してください。コマンドラインで修復処理を行いたい場合、「<code>tchmgr optimize -nl casket</code>」もしくは「<code>tcbmgr optimize -nl casket</code>」を実行してください。</dd>
 <dt>Q. : 性能を引き出すシステムの設定はどんなものがありますか？</dt>
 <dd>A. : できれば、データベースのサイズと同等以上のRAMをマシンに搭載してください。そして、I/Oバッファのサイズを大きくし、ダーティバッファをフラッシュする頻度が少なくするように設定してください。ファイルシステムの選択も重要です。Linux上では、通常はEXT2が最高速ですが、EXT3の `<code>writeback</code>' モードの方が速いこともあります。ReiserFSもかなり高速です。EXT3のその他のモードはかなり遅いです。他のファイルシステムに関しては各自で実験してみてください。</dd>
+<dt>Q. : 2GBを越えるサイズのファイルを扱おうとするとエラーになるのですが、どうしてですか？</dt>
+<dd>A. : 32ビットのファイルシステムでは、LFSなどの明示的な指定をしないと2GBを越えるサイズのファイルを作ることができません。32ビットOS上でXFSやFeiserFSなどの64ビットファイルシステムを利用する場合は2GBを越えるサイズのファイルを扱うことができますが、その際にはTokyo Cabinetを `<code>--enable-off64</code>' をつけた設定でビルドしておく必要があります。純粋な64ビット環境で利用する場合は特別な設定は必要ありません。なお、ulimitやquotaでファイルサイズの制限がかかっていないことも確認しておいてください。</dd>
 <dt>Q. : QDBMはもうメンテナンスしないのですか？</dt>
 <dd>A. : メンテナンスは続けます。積極的な機能追加の予定はありませんが、もしバグが見つかれば対処します。</dd>
 <dt>Q. : Windowsで利用できませんか？</dt>
 <dd>A. : 残念ながらできません。今のところ対応予定もありません。</dd>
 <dt>Q. : 「Tokyo Cabinet」の名前の由来はなんですか？</dt>
-<dd>A. : 作者が住んでいる街なので「tokyo」で、モノをしまうから「cabinet」です。</dd>
+<dd>A. : 作者が住んでいる街なので「tokyo」で、モノをしまうから「cabinet」です。略して「TC」と呼ぶのもよい考えです。「東京キャビネット」とか「とうきょうきゃびねっと」とかいう表記でも構いません。東京ディズニーランドや東京パフォーマンスドールとは一切関係ありません。</dd>
 <dt>Q. : あなたは千葉県とどういう関係なのですか？</dt>
 <dd>A. : 特に関係はありません。出身地は埼玉県です。落花生は好きです。</dd>
 </dl>
