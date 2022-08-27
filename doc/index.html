@@ -2,7 +2,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
 <meta http-equiv="Content-Language" content="ja" />
@@ -24,12 +24,17 @@
     var now = new Date();
     if((now.getFullYear() + now.getMonth() + now.getDate() + now.getHours()) % 4 == 0){
       var label;
-      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 8){
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 20){
       default: label = "Tokyo Cabinet"; break;
-      case 1: label = "Yokohama Cabinet"; break;
-      case 3: label = "Saitama Cabinet"; break;
-      case 5: label = "Tokorozawa Cabinet"; break;
-      case 7: label = "Kyoto Cabinet"; break;
+      case 1: label = "Shibuya Cabinet"; break;
+      case 3: label = "Harajuku Cabinet"; break;
+      case 5: label = "Shinjuku Cabinet"; break;
+      case 9: label = "Ikebukuro Cabinet"; break;
+      case 11: label = "Akihabara Cabinet"; break;
+      case 13: label = "Yokohama Cabinet"; break;
+      case 15: label = "Saitama Cabinet"; break;
+      case 17: label = "Tokorozawa Cabinet"; break;
+      case 19: label = "Kyoto Cabinet"; break;
       }
       var text;
       switch((now.getMonth() + now.getDate() + now.getMinutes()) % 8){
@@ -66,7 +71,7 @@
 
 <p>As for database of B+ tree, records whose keys are duplicated can be stored.  Access methods of storing, deleting, and retrieving are provided as with the database of hash table.  Records are stored in order by a comparison function assigned by a user.  It is possible to access each record with the cursor in ascending or descending order.  According to this mechanism, forward matching search for strings and range search for integers are realized.  Moreover, transaction is available in database of B+ tree.</p>
 
-<p>Tokyo Cabinet is written in C, and provided as API of C, Java, Perl, and Ruby.  Tokyo Cabinet is available on platforms which have API conforming to C99 and POSIX.  Tokyo Cabinet is a free software licensed under the GNU Lesser General Public License.</p>
+<p>Tokyo Cabinet is written in the C language, and provided as API of C.  Tokyo Cabinet is available on platforms which have API conforming to C99 and POSIX.  Tokyo Cabinet is a free software licensed under the GNU Lesser General Public License.</p>
 
 <hr />
 
@@ -85,8 +90,17 @@
 <p>The following is the source packages of Tokyo Cabinet.</p>
 
 <ul>
-<li><a href="tokyocabinet-0.4.1.tar.gz">Latest Source Package (version 0.4.1)</a></li>
+<li><a href="tokyocabinet-0.9.1.tar.gz">Latest Source Package (version 0.9.1)</a></li>
+<li><a href="past/">Past Versions</a></li>
 </ul>
+
+<hr />
+
+<h2>Information</h2>
+
+<p>Tokyo Cabinet was written and is maintained by <a href="http://qdbm.sourceforge.net/mikio/">Mikio Hirabayashi</a>.  You can contact the author by e-mail to `mikio@users.sourceforge.net'.</p>
+
+<p>The project page on SourceForge.net is `<a href="http://sourceforge.net/projects/tokyocabinet/">http://sourceforge.net/projects/tokyocabinet/</a>'.  Update of this project is announced on Freshmeat.net at `<a href="http://freshmeat.net/projects/tokyocabinet/">http://freshmeat.net/projects/tokyocabinet/</a>'.</p>
 
 <hr />
 
