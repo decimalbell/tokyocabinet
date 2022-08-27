@@ -1,6 +1,6 @@
 /*************************************************************************************************
  * System-dependent configurations of Tokyo Cabinet
- *                                                      Copyright (C) 2006-2009 Mikio Hirabayashi
+ *                                                               Copyright (C) 2006-2012 FAL Labs
  * This file is part of Tokyo Cabinet.
  * Tokyo Cabinet is free software; you can redistribute it and/or modify it under the terms of
  * the GNU Lesser General Public License as published by the Free Software Foundation; either
@@ -27,67 +27,67 @@
 #if defined(__linux__)
 
 #define _SYS_LINUX_
-#define TCSYSNAME  "Linux"
+#define TCSYSNAME   "Linux"
 
 #elif defined(__FreeBSD__)
 
 #define _SYS_FREEBSD_
-#define TCSYSNAME  "FreeBSD"
+#define TCSYSNAME   "FreeBSD"
 
 #elif defined(__NetBSD__)
 
 #define _SYS_NETBSD_
-#define TCSYSNAME  "NetBSD"
+#define TCSYSNAME   "NetBSD"
 
 #elif defined(__OpenBSD__)
 
 #define _SYS_OPENBSD_
-#define TCSYSNAME  "OpenBSD"
+#define TCSYSNAME   "OpenBSD"
 
-#elif defined(__sun__)
+#elif defined(__sun__) || defined(__sun)
 
 #define _SYS_SUNOS_
-#define TCSYSNAME  "SunOS"
+#define TCSYSNAME   "SunOS"
 
 #elif defined(__hpux)
 
 #define _SYS_HPUX_
-#define TCSYSNAME  "HP-UX"
+#define TCSYSNAME   "HP-UX"
 
 #elif defined(__osf)
 
 #define _SYS_TRU64_
-#define TCSYSNAME  "Tru64"
+#define TCSYSNAME   "Tru64"
 
 #elif defined(_AIX)
 
 #define _SYS_AIX_
-#define TCSYSNAME  "AIX"
+#define TCSYSNAME   "AIX"
 
 #elif defined(__APPLE__) && defined(__MACH__)
 
 #define _SYS_MACOSX_
-#define TCSYSNAME  "Mac OS X"
+#define TCSYSNAME   "Mac OS X"
 
 #elif defined(_MSC_VER)
 
 #define _SYS_MSVC_
-#define TCSYSNAME  "Windows (VC++)"
+#define TCSYSNAME   "Windows (VC++)"
 
 #elif defined(_WIN32)
 
 #define _SYS_MINGW_
-#define TCSYSNAME  "Windows (MinGW)"
+#define TCSYSNAME   "Windows (MinGW)"
 
 #elif defined(__CYGWIN__)
 
 #define _SYS_CYGWIN_
-#define TCSYSNAME  "Windows (Cygwin)"
+#define TCSYSNAME   "Windows (Cygwin)"
 
 #else
 
 #define _SYS_GENERIC_
-#define TCSYSNAME  "Generic"
+#define TCSYSNAME   "Generic"
 
 #endif
 
@@ -153,7 +153,9 @@
 #define TCITOHLL(TC_num)  (TC_num)
 #endif
 
-#if defined(_SYS_LINUX_) || defined(_SYS_FREEBSD_) || defined(_SYS_NETBSD_) || \
+#if defined(_MYNOUBC)
+#define TCUBCACHE      0
+#elif defined(_SYS_LINUX_) || defined(_SYS_FREEBSD_) || defined(_SYS_NETBSD_) || \
   defined(_SYS_MACOSX_) || defined(_SYS_SUNOS_)
 #define TCUBCACHE      1
 #else
@@ -236,6 +238,7 @@
 #include <sys/time.h>
 #include <sys/times.h>
 #include <sys/wait.h>
+#include <sys/resource.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <regex.h>
@@ -243,6 +246,9 @@
 
 #if TCUSEPTHREAD
 #include <pthread.h>
+#if defined(_POSIX_PRIORITY_SCHEDULING)
+#include <sched.h>
+#endif
 #endif
 
 
@@ -252,10 +258,21 @@
  *************************************************************************************************/
 
 
-#define sizeof(a)      ((int)sizeof(a))
+#if defined(__GNUC__)
+#define _alignof(TC_a) ((size_t)__alignof__(TC_a))
+#else
+#define _alignof(TC_a) sizeof(TC_a)
+#endif
+#define _issigned(TC_a)  ((TC_a)-1 < 1 ? true : false)
+#define _maxof(TC_a) \
+ ((TC_a)(sizeof(TC_a) == sizeof(int64_t) ? _issigned(TC_a) ? INT64_MAX : UINT64_MAX : \
+   sizeof(TC_a) == sizeof(int32_t) ? _issigned(TC_a) ? INT32_MAX : UINT32_MAX : \
+   sizeof(TC_a) == sizeof(int16_t) ? _issigned(TC_a) ? INT16_MAX : UINT16_MAX : \
+   _issigned(TC_a) ? INT8_MAX : UINT8_MAX))
 
 #if defined(_SYS_FREEBSD_) || defined(_SYS_NETBSD_) || defined(_SYS_OPENBSD_)
 #define nan(TC_a)      strtod("nan", NULL)
+#define nanl(TC_a)     ((long double)strtod("nan", NULL))
 #endif
 
 #if ! defined(PATH_MAX)
@@ -265,7 +282,11 @@
 #define PATH_MAX       4096
 #endif
 #endif
+#if ! defined(NAME_MAX)
+#define NAME_MAX       255
+#endif
 
+extern int _tc_dummy_cnt;
 
 int _tc_dummyfunc(void);
 
@@ -377,17 +398,16 @@ void *_tc_recdecode(const void *ptr, int size, int *sp, void *op);
   (*(TC_th) = 0, (TC_func)(TC_arg), 0)
 #define pthread_join(TC_th, TC_rv)       (*(TC_rv) = NULL, 0)
 #define pthread_detach(TC_th)            0
-#define pthread_yield()                  _tc_dummyfunc()
+#define sched_yield()                    _tc_dummyfunc()
 
 #endif
 
 #if TCUSEPTHREAD && TCMICROYIELD
 #define TCTESTYIELD() \
   do { \
-    static uint32_t cnt = 0; \
-    if(((++cnt) & (0x20 - 1)) == 0){ \
-      pthread_yield(); \
-      if(cnt > 0x1000) cnt = (uint32_t)time(NULL) % 0x1000; \
+    if(((++_tc_dummy_cnt) & (0x20 - 1)) == 0){ \
+      sched_yield(); \
+      if(_tc_dummy_cnt > 0x1000) _tc_dummy_cnt = (uint32_t)time(NULL) % 0x1000; \
     } \
   } while(false)
 #undef assert
@@ -399,14 +419,18 @@ void *_tc_recdecode(const void *ptr, int size, int *sp, void *op);
     } \
     TCTESTYIELD(); \
   } while(false)
+#define if(TC_cond) \
+  if((((++_tc_dummy_cnt) & (0x100 - 1)) != 0 || (sched_yield() * 0) == 0) && (TC_cond))
+#define while(TC_cond) \
+  while((((++_tc_dummy_cnt) & (0x100 - 1)) != 0 || (sched_yield() * 0) == 0) && (TC_cond))
 #else
 #define TCTESTYIELD() \
   do { \
-  } while(false);
+  } while(false)
 #endif
 
-#if defined(_SYS_MACOSX_) && TCUSEPTHREAD
-#define pthread_yield()                  usleep(1000 * 20)
+#if !defined(_POSIX_PRIORITY_SCHEDULING) && TCUSEPTHREAD
+#define sched_yield()                    usleep(1000 * 20)
 #endif
 
 
@@ -498,7 +522,12 @@ void *_tc_recdecode(const void *ptr, int size, int *sp, void *op);
     (TC_step) = _TC_i + 1; \
   } while(false)
 
-/* Compare keys of two records by lexical order. */
+/* calculate the size of a buffer for a variable length number */
+#define TCCALCVNUMSIZE(TC_num) \
+  ((TC_num) < 0x80 ? 1 : (TC_num) < 0x4000 ? 2 : (TC_num) < 0x200000 ? 3 : \
+   (TC_num) < 0x10000000 ? 4 : 5)
+
+/* compare keys of two records by lexical order */
 #define TCCMPLEXICAL(TC_rv, TC_aptr, TC_asiz, TC_bptr, TC_bsiz) \
   do { \
     (TC_rv) = 0; \
