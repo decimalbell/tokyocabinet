@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Language" content="ja" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta name="author" content="Mikio Hirabayashi" />
 <meta name="keywords" content="Tokyo Cabinet, tokyocabinet, database, DBM" />
 <meta name="description" content="homepage of Tokyo Cabinet" />
@@ -17,11 +18,46 @@
 <link rel="icon" href="icon16.png" />
 <link rev="made" href="mailto:mikio@users.sourceforge.net" />
 <title>データベースマネージャ Tokyo Cabinet</title>
+<script type="text/javascript">function startup(){
+  var elem = document.getElementById("headline");
+  if(elem){
+    var now = new Date();
+    if((now.getFullYear() + now.getMonth() + now.getDate() + now.getHours()) % 4 == 0){
+      var label;
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 8){
+      default: label = "Tokyo Cabinet"; break;
+      case 1: label = "Yokohama Cabinet"; break;
+      case 3: label = "Saitama Cabinet"; break;
+      case 5: label = "Tokorozawa Cabinet"; break;
+      case 7: label = "Kyoto Cabinet"; break;
+      }
+      var text;
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 26){
+      default: text = "世界最強絶対無敵電光石火疾風迅雷資料基盤管理器"; break;
+      case 1: text = "NDBMとは違うのだよ、NDBMとは！"; break;
+      case 3: text = "Tokyo Cabinetは伊達じゃないっ！"; break;
+      case 5: text = "敢えて言おう、高速であると！"; break;
+      case 7: text = "しかし、私もDBMのはずだ！"; break;
+      case 9: text = "今の私はTokyo Cabinetだ。それ以上でもそれ以下でもない。"; break;
+      case 11: text = "私はBerkeleyとは関係ない。私はいつも一人のDBMだった。"; break;
+      case 13: text = "見せてもらおうか！Berkeleyのデータベースの性能とやらを！"; break;
+      case 15: text = "悲しいけどこれ、DBMなのよね。"; break;
+      case 17: text = "新しい時代を創るのはSQLではない！！"; break;
+      case 19: text = "えぇぃ、マイナーチェンジのくせにっ！"; break;
+      case 21: text = "よくもこんなくたびれたDBMが現役でいられるものだ。"; break;
+      case 23: text = "見える！私にもレコードが見える"; break;
+      case 25: text = "そんなRDBみたいな口の利き方、おやめなさい！"; break;
+      }
+      elem.firstChild.nodeValue = label + ": " + text;
+    }
+  }
+}
+</script>
 </head>
 
-<body>
+<body onload="startup();">
 
-<h1>Tokyo Cabinet: DBM for Petit Hackers</h1>
+<h1 id="headline">Tokyo Cabinet: DBMの現代的な実装</h1>
 
 <div class="note">Copyright (C) 2006-2007 Mikio Hirabayashi</div>
 <div class="note">Last Update: Mon, 13 Aug 2007 04:03:06 +0900</div>
@@ -33,11 +69,13 @@
 
 <h2>概要</h2>
 
-<p>Tokyo Cabinetはデータベースを扱うルーチン群のライブラリです。データベースといっても単純なもので、キーと値のペアからなるレコード群を格納したデータファイルです。キーと値は任意の長さを持つ一連のバイト列であり、文字列でもバイナリでも扱うことができます。テーブルやデータ型の概念はありません。レコードはハッシュ表で編成されます。</p>
+<p>Tokyo Cabinetはデータベースを扱うルーチン群のライブラリです。データベースといっても単純なもので、キーと値のペアからなるレコード群を格納したデータファイルです。キーと値は任意の長さを持つ一連のバイト列であり、文字列でもバイナリでも扱うことができます。テーブルやデータ型の概念はありません。レコードはハッシュ表またはB+木で編成されます。</p>
 
-<p>ハッシュ表のデータベースでは、キーはデータベース内で一意であり、キーが重複する複数のレコードを格納することはできません。このデータベースに対しては、キーと値を指定してレコードを格納したり、キーを指定して対応するレコードを削除したり、キーを指定して対応するレコードを検索したりすることができます。また、データベースに格納してある全てのキーを順不同に一つずつ取り出すこともできます。このような操作は、UNIX標準で定義されている DBMライブラリおよびその追従であるNDBMやGDBMに類するものです。Tokyo CabinetはDBMのより良い代替として利用することができます。</p>
+<p>ハッシュ表のデータベースでは、キーはデータベース内で一意であり、キーが重複する複数のレコードを格納することはできません。このデータベースに対しては、キーと値を指定してレコードを格納したり、キーを指定して対応するレコードを削除したり、キーを指定して対応するレコードを検索したりすることができます。また、データベースに格納してある全てのキーを順不同に一つずつ取り出すこともできます。このような操作は、UNIX標準で定義されているDBMライブラリおよびその追従であるNDBMやGDBMに類するものです。Tokyo CabinetはDBMのより良い代替として利用することができます。</p>
 
-<p>Tokyo CabinetはCで記述され、CのAPIとして提供されます。Tokyo CabinetはPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
+<p>B+木のデータベースでは、キーが重複する複数のレコードを格納することができます。このデータベースに対しては、ハッシュ表のデータベースと同様に、キーを指定してレコードを格納したり取り出したり削除したりすることができます。レコードはユーザが指示した比較関数に基づいて整列されて格納されます。カーソルを用いて各レコードを昇順または降順で参照することができます。この機構によって、文字列の前方一致検索や数値の範囲検索が可能になります。また、B+木のデータベースではトランザクションが利用できます。</p>
+
+<p>Tokyo CabinetはCで記述され、C、Java、Perl、RubyのAPIとして提供されます。Tokyo CabinetはC99およびPOSIX準拠のAPIを備えるプラットフォームで利用できます。Tokyo CabinetはGNU Lesser General Public Licenseに基づくフリーソフトウェアです。</p>
 
 <hr />
 
@@ -52,7 +90,8 @@
 <h2>ダウンロード</h2>
 
 <ul>
-<li><a href="tokyocabinet-0.3.4.tar.gz">最新のソースパッケージ（バージョン0.3.4）</a></li>
+<li><a href="tokyocabinet-0.4.1.tar.gz">最新のソースパッケージ（バージョン0.4.1）</a></li>
+<li><a href="past/">過去のバージョン</a></li>
 </ul>
 
 <hr />

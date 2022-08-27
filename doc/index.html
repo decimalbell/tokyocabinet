@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Language" content="ja" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta name="author" content="Mikio Hirabayashi" />
 <meta name="keywords" content="Tokyo Cabinet, tokyocabinet, database, DBM" />
 <meta name="description" content="homepage of Tokyo Cabinet" />
@@ -16,12 +17,38 @@
 <link rel="stylesheet" href="common.css" />
 <link rel="icon" href="icon16.png" />
 <link rev="made" href="mailto:mikio@users.sourceforge.net" />
-<title>Tokyo Cabinet: DBM for Petit Hackers</title>
+<title>Tokyo Cabinet: a modern implementation of DBM</title>
+<script type="text/javascript">function startup(){
+  var elem = document.getElementById("headline");
+  if(elem){
+    var now = new Date();
+    if((now.getFullYear() + now.getMonth() + now.getDate() + now.getHours()) % 4 == 0){
+      var label;
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 8){
+      default: label = "Tokyo Cabinet"; break;
+      case 1: label = "Yokohama Cabinet"; break;
+      case 3: label = "Saitama Cabinet"; break;
+      case 5: label = "Tokorozawa Cabinet"; break;
+      case 7: label = "Kyoto Cabinet"; break;
+      }
+      var text;
+      switch((now.getMonth() + now.getDate() + now.getMinutes()) % 8){
+      default: text = "super hyper ultra database manager"; break;
+      case 1: text = "quicker database manager"; break;
+      case 3: text = "the uitimate database manager"; break;
+      case 5: text = "the supreme database manager"; break;
+      case 7: text = "the dinosaur wing of database managers"; break;
+      }
+      elem.firstChild.nodeValue = label + ": " + text;
+    }
+  }
+}
+</script>
 </head>
 
-<body>
+<body onload="startup();">
 
-<h1>Tokyo Cabinet: DBM for Petit Hackers</h1>
+<h1 id="headline">Tokyo Cabinet: a modern implementation of DBM</h1>
 
 <div class="note">Copyright (C) 2006-2007 Mikio Hirabayashi</div>
 <div class="note">Last Update: Mon, 13 Aug 2007 04:03:06 +0900</div>
@@ -37,7 +64,9 @@
 
 <p>As for database of hash table, each key must be unique within a database, so it is impossible to store two or more records with a key overlaps.  The following access methods are provided to the database: storing a record with a key and a value, deleting a record by a key, retrieving a record by a key.  Moreover, traversal access to every key are provided, although the order is arbitrary.  These access methods are similar to ones of DBM (or its followers: NDBM and GDBM) library defined in the UNIX standard.  Tokyo Cabinet is an alternative for DBM because of its higher performance.</p>
 
-<p>Tokyo Cabinet is written in C, and provided as API of C.  Tokyo Cabinet is available on platforms which have API conforming to POSIX.  Tokyo Cabinet is a free software licensed under the GNU Lesser General Public License.</p>
+<p>As for database of B+ tree, records whose keys are duplicated can be stored.  Access methods of storing, deleting, and retrieving are provided as with the database of hash table.  Records are stored in order by a comparison function assigned by a user.  It is possible to access each record with the cursor in ascending or descending order.  According to this mechanism, forward matching search for strings and range search for integers are realized.  Moreover, transaction is available in database of B+ tree.</p>
+
+<p>Tokyo Cabinet is written in C, and provided as API of C, Java, Perl, and Ruby.  Tokyo Cabinet is available on platforms which have API conforming to C99 and POSIX.  Tokyo Cabinet is a free software licensed under the GNU Lesser General Public License.</p>
 
 <hr />
 
@@ -56,7 +85,7 @@
 <p>The following is the source packages of Tokyo Cabinet.</p>
 
 <ul>
-<li><a href="tokyocabinet-0.3.4.tar.gz">Latest Source Package (version 0.3.4)</a></li>
+<li><a href="tokyocabinet-0.4.1.tar.gz">Latest Source Package (version 0.4.1)</a></li>
 </ul>
 
 <hr />
