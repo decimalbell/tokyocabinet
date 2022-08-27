@@ -101,7 +101,7 @@
 <pre>/usr/local/include/tcutil.h
 /usr/local/include/tchdb.h
 /usr/local/lib/libtokyocabinet.a
-/usr/local/lib/libtokyocabinet.so.1.3.0
+/usr/local/lib/libtokyocabinet.so.1.6.0
 /usr/local/lib/libtokyocabinet.so.1
 /usr/local/lib/libtokyocabinet.so
 /usr/local/share/tokyocabinet/...
@@ -119,7 +119,8 @@
 <li><kbd>--enable-profile</kbd> : プロファイル用にビルドします。プロファイルオプションを有効化し、最適化を行い、動的にリンクします。</li>
 <li><kbd>--enable-fastest</kbd> : 最高速になるように最適化を行います。</li>
 <li><kbd>--enable-swab</kbd> : バイトオーダの変換を強制します。</li>
-<li><kbd>--disable-zlib</kbd> : ZLIBによる転置インデックスのレコード圧縮を無効にします。</li>
+<li><kbd>--disable-zlib</kbd> : ZLIBによるレコード圧縮を無効にします。</li>
+<li><kbd>--disable-pthread</kbd> : POSIXスレッドのサポートを無効にします。</li>
 <li><kbd>--disable-shared</kbd> : 共有ライブラリのビルドを行いません。</li>
 </ul>
 
@@ -143,7 +144,7 @@
 
 <h3>ハッシュデータベースのファイルフォーマット</h3>
 
-<p>ハッシュデータベースが管理するデータベースファイルの内容は、ヘッダ部、バケット部、フリーブロックプール部、レコード部の三つに大別される。ファイルに記録される数値は固定長数値もしくは可変長数値として記録される。前者は数値を特定の領域にリトルエンディアンで直列化したものである。後者は数値を可変長の領域に128進法のデルタ符号で直列化したものである。</p>
+<p>ハッシュデータベースが管理するデータベースファイルの内容は、ヘッダ部、バケット部、フリーブロックプール部、レコード部の4つに大別される。ファイルに記録される数値は固定長数値もしくは可変長数値として記録される。前者は数値を特定の領域にリトルエンディアンで直列化したものである。後者は数値を可変長の領域に128進法のデルタ符号で直列化したものである。</p>
 
 <p>ヘッダ部はファイルの先頭から128バイトの固定長でとられ、以下の情報が記録される。</p>
 
