@@ -1,6 +1,6 @@
 /*************************************************************************************************
  * The command line utility of the fixed-length database API
- *                                                      Copyright (C) 2006-2009 Mikio Hirabayashi
+ *                                                               Copyright (C) 2006-2012 FAL Labs
  * This file is part of Tokyo Cabinet.
  * Tokyo Cabinet is free software; you can redistribute it and/or modify it under the terms of
  * the GNU Lesser General Public License as published by the Free Software Foundation; either
@@ -57,7 +57,7 @@ int main(int argc, char **argv){
   g_progname = argv[0];
   g_dbgfd = -1;
   const char *ebuf = getenv("TCDBGFD");
-  if(ebuf) g_dbgfd = tcatoi(ebuf);
+  if(ebuf) g_dbgfd = tcatoix(ebuf);
   if(argc < 2) usage();
   int rv = 0;
   if(!strcmp(argv[1], "create")){
@@ -92,7 +92,7 @@ static void usage(void){
   fprintf(stderr, "usage:\n");
   fprintf(stderr, "  %s create path [width [limsiz]]\n", g_progname);
   fprintf(stderr, "  %s inform [-nl|-nb] path\n", g_progname);
-  fprintf(stderr, "  %s put [-nl|-nb] [-sx] [-dk|-dc] path key value\n", g_progname);
+  fprintf(stderr, "  %s put [-nl|-nb] [-sx] [-dk|-dc|-dai|-dad] path key value\n", g_progname);
   fprintf(stderr, "  %s out [-nl|-nb] [-sx] path key\n", g_progname);
   fprintf(stderr, "  %s get [-nl|-nb] [-sx] [-px] [-pz] path key\n", g_progname);
   fprintf(stderr, "  %s list [-nl|-nb] [-m num] [-pv] [-px] [-rb lkey ukey] [-ri str] path\n",
@@ -134,7 +134,7 @@ static int printdata(const char *ptr, int size, bool px){
 static char *mygetline(FILE *ifp){
   int len = 0;
   int blen = 1024;
-  char *buf = tcmalloc(blen);
+  char *buf = tcmalloc(blen + 1);
   bool end = true;
   int c;
   while((c = fgetc(ifp)) != EOF){
@@ -176,8 +176,8 @@ static int runcreate(int argc, char **argv){
     }
   }
   if(!path) usage();
-  int width = wstr ? tcatoi(wstr) : -1;
-  int64_t limsiz = lstr ? strtoll(lstr, NULL, 10) : -1;
+  int width = wstr ? tcatoix(wstr) : -1;
+  int64_t limsiz = lstr ? tcatoix(lstr) : -1;
   int rv = proccreate(path, width, limsiz);
   return rv;
 }
@@ -226,6 +226,10 @@ static int runput(int argc, char **argv){
         dmode = -1;
       } else if(!strcmp(argv[i], "-dc")){
         dmode = 1;
+      } else if(!strcmp(argv[i], "-dai")){
+        dmode = 10;
+      } else if(!strcmp(argv[i], "-dad")){
+        dmode = 11;
       } else if(!strcmp(argv[i], "-sx")){
         sx = true;
       } else {
@@ -242,8 +246,8 @@ static int runput(int argc, char **argv){
     }
   }
   if(!path || !key || !value) usage();
-  int ksiz, vsiz;
   char *kbuf, *vbuf;
+  int ksiz, vsiz;
   if(sx){
     kbuf = tchexdecode(key, &ksiz);
     vbuf = tchexdecode(value, &vsiz);
@@ -364,7 +368,7 @@ static int runlist(int argc, char **argv){
         omode |= FDBOLCKNB;
       } else if(!strcmp(argv[i], "-m")){
         if(++i >= argc) usage();
-        max = tcatoi(argv[i]);
+        max = tcatoix(argv[i]);
       } else if(!strcmp(argv[i], "-pv")){
         pv = true;
       } else if(!strcmp(argv[i], "-px")){
@@ -418,8 +422,8 @@ static int runoptimize(int argc, char **argv){
     }
   }
   if(!path) usage();
-  int width = wstr ? tcatoi(wstr) : -1;
-  int64_t limsiz = lstr ? strtoll(lstr, NULL, 10) : -1;
+  int width = wstr ? tcatoix(wstr) : -1;
+  int64_t limsiz = lstr ? tcatoix(lstr) : -1;
   int rv = procoptimize(path, width, limsiz, omode);
   return rv;
 }
@@ -502,9 +506,10 @@ static int procinform(const char *path, int omode){
   printf("path: %s\n", npath);
   const char *type = "(unknown)";
   switch(tcfdbtype(fdb)){
-  case TCDBTHASH: type = "hash"; break;
-  case TCDBTBTREE: type = "btree"; break;
-  case TCDBTFIXED: type = "fixed"; break;
+    case TCDBTHASH: type = "hash"; break;
+    case TCDBTBTREE: type = "btree"; break;
+    case TCDBTFIXED: type = "fixed"; break;
+    case TCDBTTABLE: type = "table"; break;
   }
   printf("database type: %s\n", type);
   uint8_t flags = tcfdbflags(fdb);
@@ -543,25 +548,45 @@ static int procput(const char *path, const char *kbuf, int ksiz, const char *vbu
     return 1;
   }
   bool err = false;
+  int inum;
+  double dnum;
   switch(dmode){
-  case -1:
-    if(!tcfdbputkeep2(fdb, kbuf, ksiz, vbuf, vsiz)){
-      printerr(fdb);
-      err = true;
-    }
-    break;
-  case 1:
-    if(!tcfdbputcat2(fdb, kbuf, ksiz, vbuf, vsiz)){
-      printerr(fdb);
-      err = true;
-    }
-    break;
-  default:
-    if(!tcfdbput2(fdb, kbuf, ksiz, vbuf, vsiz)){
-      printerr(fdb);
-      err = true;
-    }
-    break;
+    case -1:
+      if(!tcfdbputkeep2(fdb, kbuf, ksiz, vbuf, vsiz)){
+        printerr(fdb);
+        err = true;
+      }
+      break;
+    case 1:
+      if(!tcfdbputcat2(fdb, kbuf, ksiz, vbuf, vsiz)){
+        printerr(fdb);
+        err = true;
+      }
+      break;
+    case 10:
+      inum = tcfdbaddint(fdb, tcfdbkeytoid(kbuf, ksiz), tcatoi(vbuf));
+      if(inum == INT_MIN){
+        printerr(fdb);
+        err = true;
+      } else {
+        printf("%d\n", inum);
+      }
+      break;
+    case 11:
+      dnum = tcfdbadddouble(fdb, tcfdbkeytoid(kbuf, ksiz), tcatof(vbuf));
+      if(isnan(dnum)){
+        printerr(fdb);
+        err = true;
+      } else {
+        printf("%.6f\n", dnum);
+      }
+      break;
+    default:
+      if(!tcfdbput2(fdb, kbuf, ksiz, vbuf, vsiz)){
+        printerr(fdb);
+        err = true;
+      }
+      break;
   }
   if(!tcfdbclose(fdb)){
     if(!err) printerr(fdb);
@@ -732,7 +757,7 @@ static int procimporttsv(const char *path, const char *file, int omode, bool sc)
       continue;
     }
     *pv = '\0';
-    if(sc) tcstrtolower(line);
+    if(sc) tcstrutfnorm(line, TCUNSPACE | TCUNLOWER | TCUNNOACC | TCUNWIDTH);
     if(!tcfdbput3(fdb, line, pv + 1)){
       printerr(fdb);
       err = true;
@@ -758,8 +783,9 @@ static int procimporttsv(const char *path, const char *file, int omode, bool sc)
 
 /* perform version command */
 static int procversion(void){
-  printf("Tokyo Cabinet version %s (%d:%s)\n", tcversion, _TC_LIBVER, _TC_FORMATVER);
-  printf("Copyright (C) 2006-2009 Mikio Hirabayashi\n");
+  printf("Tokyo Cabinet version %s (%d:%s) for %s\n",
+         tcversion, _TC_LIBVER, _TC_FORMATVER, TCSYSNAME);
+  printf("Copyright (C) 2006-2012 FAL Labs\n");
   return 0;
 }
 
